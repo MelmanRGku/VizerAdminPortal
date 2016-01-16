@@ -1,6 +1,6 @@
 <?php
 
-header("Location: ./pages/blank/");
+header("Location: ./pages/login/");
 die();
 
 ?>
