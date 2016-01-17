@@ -34,7 +34,7 @@ include_once($projectRoot."/template/header.php");
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-              <table class="table table-bordered">
+              <table class="table table-bordered table-hover">
                 <tbody><tr>
                   <th style="width: 10px">#</th>
                   <th>Address</th>
