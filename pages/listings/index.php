@@ -30,7 +30,7 @@ include_once($projectRoot."/template/header.php");
                 <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Address, city, etc.">
               </div>
               <button type="button" class="btn btn-primary">Search</button>
-              <button type="button" class="btn btn-success">New Listing</button>
+              <a type="button" href="./newListing.php" class="btn btn-success">New Listing</a>
             </div>
             <!-- /.box-header -->
             <div class="box-body">

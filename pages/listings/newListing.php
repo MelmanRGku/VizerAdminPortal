@@ -15,7 +15,7 @@ include_once($projectRoot."/template/header.php");
     </h1>
     <ol class="breadcrumb">
       <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-      <li class="active">Listings</li>
+      <li class="active"><a href="./">Listings</a></li>
       <li class="active">New Listing</li>
     </ol>
   </section>
