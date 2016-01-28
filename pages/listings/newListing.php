@@ -66,7 +66,7 @@ include_once($projectRoot."/includes/function.php");
                 </div>
 
                 <div class="form-group">
-                  <label>Email of User</label>
+                  <label>User Email</label>
                   <input type="email" class="form-control" name="emailField">
                 </div>
 
@@ -76,8 +76,8 @@ include_once($projectRoot."/includes/function.php");
                 </div>
 
                 <div class="form-group">
-                  <label>Private?</label>
                   <input type="checkbox" value="private" name="privateField">
+                  <label>Private?</label>
                 </div>
 
                 <button type="submit" class="btn btn-success">Submit</button>

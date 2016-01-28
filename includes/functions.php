@@ -4,6 +4,8 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+require_once $projectRoot.'/includes/awsSDK/aws-autoloader.php';
+
 use Aws\DynamoDb\DynamoDbClient;
 use Aws\S3\S3Client;
 use Aws\DynamoDb\Exception\DynamoDbException;
@@ -64,6 +66,34 @@ function addToListingDB($item)
 	}
 }
 
+function getAllListings()
+{
+	$sdkConn = getSDKConnection();
+	$dynamodb = $sdkConn->createDynamoDb();
+
+    $iterator = $dynamodb->getIterator('Scan', array( 
+		'TableName'     => 'Listing',
+    	));
+
+    $returnArr = iterator_to_array($iterator);
+
+    return $returnArr;
+}
+
+function searchListings($query)
+{
+	$sdkConn = getSDKConnection();
+	$dynamodb = $sdkConn->createDynamoDb();
+
+    $iterator = $dynamodb->getIterator('Scan', array( 
+		'TableName'     => 'Listing',
+    	));
+
+    $returnArr = iterator_to_array($iterator);
+    
+    return $returnArr;
+}
+
 function createUUID()
 {
 	$hostname = gethostname();
@@ -72,6 +102,5 @@ function createUUID()
 
 	return md5($UUID);
 }
-
 
 ?>

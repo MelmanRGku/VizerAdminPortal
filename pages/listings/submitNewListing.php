@@ -5,7 +5,6 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 $projectRoot = "../../";
-require_once $projectRoot.'/includes/awsSDK/aws-autoloader.php';
 include_once($projectRoot."/includes/functions.php");
 
 $address = $_POST["addressField"];
@@ -22,6 +21,7 @@ $item = array(
   "ListingID" => array('S' => $UUID),
   "HousePhotoURL" => array('S' => 'blahblah'),
   "Address" => array('S' => $address),
+  "City" => array('S' => $city),
   "Price" => array('N' => $price),
   "Description" => array('S' => $description),
   "UserEmail" => array('S' => $userEmail),

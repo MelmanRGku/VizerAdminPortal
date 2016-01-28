@@ -2,6 +2,11 @@
 
 $projectRoot = "../../";
 include_once($projectRoot."/template/header.php");
+include_once($projectRoot."/includes/functions.php");
+
+$allListings =  getAllListings();
+
+// print_r($allListings);
 ?>
 
 <!-- Content Wrapper. Contains page content -->
@@ -41,7 +46,21 @@ include_once($projectRoot."/template/header.php");
                   <th>City</th>
                   <th style="width: 40px">Details</th>
                 </tr>
-                <tr>
+
+                <?php
+
+                foreach($allListings as $listing)
+                {
+                  echo "<tr>";
+                  echo "<td>".$listing["ListingID"]["S"]."</td>";
+                  echo "<td>".$listing["Address"]["S"]."</td>";
+                  echo "<td>".$listing["City"]["S"]."</td>";
+                  echo '<td><button type="button" class="btn btn-block btn-warning">Edit</button></td>';
+                  echo "</tr>";
+                }
+
+                ?>
+<!--                 <tr>
                   <td>21</td>
                   <td>Blah blah street</td>
                   <td>Blah Town</td>
@@ -58,9 +77,10 @@ include_once($projectRoot."/template/header.php");
                   <td>Blah blah street</td>
                   <td>Blah Town</td>
                   <td><button type="button" class="btn btn-block btn-warning">Edit</button></td>
-                </tr>
+                </tr> -->
                 
               </tbody></table>
+
             </div>
             <!-- /.box-body -->
             <div class="box-footer clearfix">
