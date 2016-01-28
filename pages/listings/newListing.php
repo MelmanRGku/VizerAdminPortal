@@ -2,6 +2,8 @@
 
 $projectRoot = "../../";
 include_once($projectRoot."/template/header.php");
+include_once($projectRoot."/includes/function.php");
+
 ?>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
 
@@ -29,26 +31,56 @@ include_once($projectRoot."/template/header.php");
     <div class="box">
 
             <!-- /.box-header -->
-            <form role="form">
+            <form role="form" method="post" action="./submitNewListing.php">
               <div class="box-body">
 
               <div id="imageHolder">
               </div>
 
                 <div class="form-group">
-                  <label for="exampleInputFile">Main Image</label>
+                  <label>Main Image</label>
                   <input type="file" id="imgInp">
                 </div>
 
                 <div class="form-group">
-                  <label for="exampleInputEmail1">Address</label>
-                  <input type="email" class="form-control" id="exampleInputEmail1">
-                </div>
-                <div class="form-group">
-                  <label for="exampleInputEmail1">City</label>
-                  <input type="email" class="form-control" id="exampleInputEmail1">
+                  <label>Address</label>
+                  <input type="text" class="form-control" name="addressField">
                 </div>
 
+                <div class="form-group">
+                  <label>City</label>                  
+                  <select class="form-control" name="cityField" required>
+                    <option value="Calgary" selected>Calgary</option>
+                    <option>Edmoton</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label>Price</label>
+                  <input type="number" class="form-control" name="priceField">
+                </div>
+
+                <div class="form-group">
+                  <label>Description</label>
+                  <textarea class="form-control" name = "descriptionField"></textarea>
+                </div>
+
+                <div class="form-group">
+                  <label>Email of User</label>
+                  <input type="email" class="form-control" name="emailField">
+                </div>
+
+                <div class="form-group">
+                  <label>URL</label>
+                  <input type="text" class="form-control" name="urlField">
+                </div>
+
+                <div class="form-group">
+                  <label>Private?</label>
+                  <input type="checkbox" value="private" name="privateField">
+                </div>
+
+                <button type="submit" class="btn btn-success">Submit</button>
               </div>
             </form>
          
@@ -89,6 +121,6 @@ $("#imgInp").change(function(){
 
 <?php
 
-include_once($projectRoot."/template/footer.php");
+include_once("../../template/footer.php");
 ?>
 
