@@ -61,18 +61,6 @@ function addToListingDB($item)
 	$dynamodb = $sdkConn->createDynamoDb();
 	$marshaler = new Marshaler();
 
-	$tableName = 'Listing';
-
-	$ListingID = 21312;
-	$UserID = 00000001;
-	$StartingRoomID = 00000006;
-	$IsPrivate = True;
-	$HousePhotoURL = 'testurl.com';
-	$Description = 'This house is a test house';
-	$Address = 'Test Address';
-	$MLSURL = 'testmlsurl.ca';
-	$Price = '$0';
-
 	$params = [
     	'TableName' => 'Listing',
     	'Item' => $item
@@ -119,7 +107,7 @@ function uploadImage($imageAddrs, $imgID)
 	// We can poll the object until it is accessible
 	$s3->waitUntil('ObjectExists', array(
     	'Bucket' => 'izerlabshousestorage',
-   		 'Key'    => 'test_image.jpg'
+   		 'Key'    => $imgID
 	));
 
 	//delete temp file
