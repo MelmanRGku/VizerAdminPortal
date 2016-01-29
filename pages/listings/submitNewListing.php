@@ -78,6 +78,6 @@ $item = array(
 
 addToListingDB($item);
 
-// header('Location: ./');
+header('Location: ./');
 
 ?>
