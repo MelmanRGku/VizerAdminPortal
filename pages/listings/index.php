@@ -5,7 +5,6 @@ include_once($projectRoot."/template/header.php");
 include_once($projectRoot."/includes/functions.php");
 
 $allListings =  getAllListings();
-
 // print_r($allListings);
 ?>
 

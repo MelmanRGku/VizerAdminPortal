@@ -31,7 +31,7 @@ include_once($projectRoot."/includes/function.php");
     <div class="box">
 
             <!-- /.box-header -->
-            <form role="form" method="post" action="./submitNewListing.php">
+            <form role="form" method="post" action="./submitNewListing.php" enctype="multipart/form-data">
               <div class="box-body">
 
               <div id="imageHolder">
@@ -39,7 +39,7 @@ include_once($projectRoot."/includes/function.php");
 
                 <div class="form-group">
                   <label>Main Image</label>
-                  <input type="file" id="imgInp">
+                  <input type="file" name="imgUpload" id="imgUpload">
                 </div>
 
                 <div class="form-group">
@@ -114,7 +114,7 @@ function readURL(input) {
     }
 }
 
-$("#imgInp").change(function(){
+$("#imgUpload").change(function(){
     readURL(this);
 });
 </script>

@@ -27,6 +27,28 @@ function getSDKConnection()
     'http'    => [
         'verify' => $projectRoot .'includes/awsSDK/ca-bundle.crt'
     ]
+    ]);
+
+	return $sdk;
+
+}
+
+function getS3Connection()
+{
+	date_default_timezone_set('UTC');
+	global $projectRoot;
+
+	$sdk = new Aws\Sdk([
+	'endpoint'   => 'https://s3-us-west-2.amazonaws.com',
+    'region'   => 'us-west-2',
+    'version'  => 'latest',
+    'credentials' => [
+    'key'    => 'AKIAICEANPUXOOHUW7GQ',
+    'secret' => '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'
+    ],
+    'http'    => [
+        'verify' => $projectRoot .'includes/awsSDK/ca-bundle.crt'
+    ]
 ]);
 
 	return $sdk;
@@ -78,6 +100,27 @@ function getAllListings()
     $returnArr = iterator_to_array($iterator);
 
     return $returnArr;
+}
+
+function uploadImage($imageAddrs)
+{
+	$sdkConn = getSDKConnection();
+	$s3 = $sdkConn->createS3();
+
+	$result = $s3->putObject(array(
+    'Bucket'     => 'izerlabshousestorage',
+    'Key'        => 'test_image.jpg',
+    'ContentType'  => 'image/jpg',
+    'SourceFile' => $imageAddrs,
+    'ACL'          => 'public-read',
+));
+	print_r($result);
+	// We can poll the object until it is accessible
+$s3->waitUntil('ObjectExists', array(
+    'Bucket' => 'izerlabshousestorage',
+    'Key'    => 'test_image.jpg'
+));
+
 }
 
 function searchListings($query)
