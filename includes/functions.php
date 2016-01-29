@@ -107,6 +107,8 @@ function uploadImage($imageAddrs)
 	$sdkConn = getS3Connection();
 	$s3 = $sdkConn->createS3();
 
+	echo $imageAddrs;
+
 	$result = $s3->putObject(array(
     'Bucket'     => 'izerlabshousestorage',
     'Key'        => 'test_image.jpg',

@@ -42,7 +42,7 @@ if ($uploadOk == 0) {
     if (move_uploaded_file($_FILES["imgUpload"]["tmp_name"], $target_file)) {
         echo "The file ". basename( $_FILES["imgUpload"]["name"]). " has been uploaded.";
         $imagePath = $_FILES["imgUpload"]["name"];
-        uploadImage($imagePath);
+        uploadImage($target_file);
 
     } else {
         echo "Sorry, there was an error uploading your file.";
