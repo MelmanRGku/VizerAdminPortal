@@ -104,7 +104,7 @@ function getAllListings()
 
 function uploadImage($imageAddrs)
 {
-	$sdkConn = getSDKConnection();
+	$sdkConn = getS3Connection();
 	$s3 = $sdkConn->createS3();
 
 	$result = $s3->putObject(array(
