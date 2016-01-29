@@ -39,12 +39,12 @@ include_once($projectRoot."/includes/function.php");
 
                 <div class="form-group">
                   <label>Main Image</label>
-                  <input type="file" name="imgUpload" id="imgUpload">
+                  <input type="file" name="imgUpload" id="imgUpload" required>
                 </div>
 
                 <div class="form-group">
                   <label>Address</label>
-                  <input type="text" class="form-control" name="addressField">
+                  <input type="text" class="form-control" name="addressField" required>
                 </div>
 
                 <div class="form-group">
@@ -57,22 +57,22 @@ include_once($projectRoot."/includes/function.php");
 
                 <div class="form-group">
                   <label>Price</label>
-                  <input type="number" class="form-control" name="priceField">
+                  <input type="number" class="form-control" name="priceField" required>
                 </div>
 
                 <div class="form-group">
                   <label>Description</label>
-                  <textarea class="form-control" name = "descriptionField"></textarea>
+                  <textarea class="form-control" name = "descriptionField" required></textarea>
                 </div>
 
                 <div class="form-group">
                   <label>User Email</label>
-                  <input type="email" class="form-control" name="emailField">
+                  <input type="email" class="form-control" name="emailField" required>
                 </div>
 
                 <div class="form-group">
                   <label>URL</label>
-                  <input type="text" class="form-control" name="urlField">
+                  <input type="text" class="form-control" name="urlField" required>
                 </div>
 
                 <div class="form-group">

@@ -8,7 +8,7 @@ $projectRoot = "../../";
 include_once($projectRoot."/includes/functions.php");
 
 
-$target_dir = "uploads/";
+$target_dir = "temp_uploads/";
 $target_file = $target_dir . basename($_FILES["imgUpload"]["name"]);
 $uploadOk = 1;
 $imageFileType = pathinfo($target_file,PATHINFO_EXTENSION);
@@ -32,7 +32,7 @@ if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg
     $uploadOk = 0;
 }
 
-$imagePath = "";
+$imgID = createUUID();
 
 // Check if $uploadOk is set to 0 by an error
 if ($uploadOk == 0) {
@@ -40,15 +40,12 @@ if ($uploadOk == 0) {
 // if everything is ok, try to upload file
 } else {
     if (move_uploaded_file($_FILES["imgUpload"]["tmp_name"], $target_file)) {
-        echo "The file ". basename( $_FILES["imgUpload"]["name"]). " has been uploaded.";
-        $imagePath = $_FILES["imgUpload"]["name"];
-        uploadImage($target_file);
-
+        // echo "The file ". basename( $_FILES["imgUpload"]["name"]). " has been uploaded.";
+        uploadImage($target_file, $imgID);
     } else {
         echo "Sorry, there was an error uploading your file.";
     }
 }
-
 
 $address = $_POST["addressField"];
 $city = $_POST["cityField"];
@@ -62,7 +59,7 @@ $UUID = createUUID();
 
 $item = array(
   "ListingID" => array('S' => $UUID),
-  "HousePhotoURL" => array('S' => 'blahblah'),
+  "HousePhotoID" => array('S' => $imgID),
   "Address" => array('S' => $address),
   "City" => array('S' => $city),
   "Price" => array('N' => $price),
@@ -78,6 +75,6 @@ $item = array(
 
 addToListingDB($item);
 
-// header('Location: ./');
+header('Location: ./');
 
 ?>

@@ -40,9 +40,9 @@ $allListings =  getAllListings();
             <div class="box-body">
               <table class="table table-bordered table-hover">
                 <tbody><tr>
-                  <th style="width: 10px">#</th>
                   <th>Address</th>
                   <th>City</th>
+                  <th>User Email</th>
                   <th style="width: 40px">Details</th>
                 </tr>
 
@@ -51,32 +51,14 @@ $allListings =  getAllListings();
                 foreach($allListings as $listing)
                 {
                   echo "<tr>";
-                  echo "<td>".$listing["ListingID"]["S"]."</td>";
                   echo "<td>".$listing["Address"]["S"]."</td>";
                   echo "<td>".$listing["City"]["S"]."</td>";
+                  echo "<td>".$listing["UserEmail"]["S"]."</td>";
                   echo '<td><button type="button" class="btn btn-block btn-warning">Edit</button></td>';
                   echo "</tr>";
                 }
 
                 ?>
-<!--                 <tr>
-                  <td>21</td>
-                  <td>Blah blah street</td>
-                  <td>Blah Town</td>
-                  <td><button type="button" class="btn btn-block btn-warning">Edit</button></td>
-                </tr>
-                <tr>
-                  <td>323</td>
-                  <td>Blah blah street</td>
-                  <td>Blah Town</td>
-                  <td><button type="button" class="btn btn-block btn-warning">Edit</button></td>
-                </tr>
-                <tr>
-                  <td>932</td>
-                  <td>Blah blah street</td>
-                  <td>Blah Town</td>
-                  <td><button type="button" class="btn btn-block btn-warning">Edit</button></td>
-                </tr> -->
                 
               </tbody></table>
 

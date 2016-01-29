@@ -11,7 +11,7 @@ use Aws\S3\S3Client;
 use Aws\DynamoDb\Exception\DynamoDbException;
 use Aws\DynamoDb\Marshaler;
 
-function getSDKConnection()
+function getDBConnection()
 {
 	date_default_timezone_set('UTC');
 	global $projectRoot;
@@ -57,7 +57,7 @@ function getS3Connection()
 
 function addToListingDB($item)
 {
-	$sdkConn = getSDKConnection();
+	$sdkConn = getDBConnection();
 	$dynamodb = $sdkConn->createDynamoDb();
 	$marshaler = new Marshaler();
 
@@ -90,7 +90,7 @@ function addToListingDB($item)
 
 function getAllListings()
 {
-	$sdkConn = getSDKConnection();
+	$sdkConn = getDBConnection();
 	$dynamodb = $sdkConn->createDynamoDb();
 
     $iterator = $dynamodb->getIterator('Scan', array( 
@@ -102,32 +102,34 @@ function getAllListings()
     return $returnArr;
 }
 
-function uploadImage($imageAddrs)
+function uploadImage($imageAddrs, $imgID)
 {
 	$sdkConn = getS3Connection();
 	$s3 = $sdkConn->createS3();
 
-	echo $imageAddrs;
-
 	$result = $s3->putObject(array(
     'Bucket'     => 'izerlabshousestorage',
-    'Key'        => 'test_image.jpg',
+    'Key'        => $imgID,
     'ContentType'  => 'image/jpg',
     'SourceFile' => $imageAddrs,
     'ACL'          => 'public-read',
 ));
-	print_r($result);
+	// print_r($result);
+	
 	// We can poll the object until it is accessible
-$s3->waitUntil('ObjectExists', array(
-    'Bucket' => 'izerlabshousestorage',
-    'Key'    => 'test_image.jpg'
-));
+	$s3->waitUntil('ObjectExists', array(
+    	'Bucket' => 'izerlabshousestorage',
+   		 'Key'    => 'test_image.jpg'
+	));
+
+	//delete temp file
+	unlink($imageAddrs);
 
 }
 
 function searchListings($query)
 {
-	$sdkConn = getSDKConnection();
+	$sdkConn = getDBConnection();
 	$dynamodb = $sdkConn->createDynamoDb();
 
     $iterator = $dynamodb->getIterator('Scan', array( 
