@@ -39,9 +39,11 @@ if ($uploadOk == 0) {
     echo "Sorry, your file was not uploaded.";
 // if everything is ok, try to upload file
 } else {
+  // echo $_FILES["imgUpload"]["tmp_name"];
     if (move_uploaded_file($_FILES["imgUpload"]["tmp_name"], $target_file)) {
         // echo "The file ". basename( $_FILES["imgUpload"]["name"]). " has been uploaded.";
         uploadImage($target_file, $imgID);
+
     } else {
         echo "Sorry, there was an error uploading your file.";
         exit();
@@ -76,6 +78,6 @@ $item = array(
 
 addToListingDB($item);
 
-header('Location: ./');
+// header('Location: ./');
 
 ?>
