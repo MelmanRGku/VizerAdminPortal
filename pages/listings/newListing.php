@@ -17,7 +17,7 @@ include_once($projectRoot."/includes/function.php");
     </h1>
     <ol class="breadcrumb">
       <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-      <li class="active"><a href="./">Listings</a></li>
+      <li><a href="./">Listings</a></li>
       <li class="active">New Listing</li>
     </ol>
   </section>
@@ -31,7 +31,7 @@ include_once($projectRoot."/includes/function.php");
     <div class="box">
 
             <!-- /.box-header -->
-            <form role="form" method="post" action="./submitNewListing.php" enctype="multipart/form-data">
+            <form role="form" method="post" action="./submitNewListing.php">
               <div class="box-body">
 
               <div id="imageHolder">

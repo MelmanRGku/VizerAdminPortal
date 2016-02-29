@@ -90,6 +90,21 @@ function getAllListings()
     return $returnArr;
 }
 
+function getAllAdmins()
+{
+    $sdkConn = getDBConnection();
+    $dynamodb = $sdkConn->createDynamoDb();
+
+    $iterator = $dynamodb->getIterator('Scan', array( 
+        'TableName'     => 'Admin',
+        'ProjectionExpression' => 'Email, AdminName',
+        ));
+
+    $returnArr = iterator_to_array($iterator);
+
+    return $returnArr;
+}
+
 function uploadImage($imageAddrs, $imgID)
 {
 	$sdkConn = getS3Connection();

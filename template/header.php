@@ -153,7 +153,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <li><a href="#"><i class="fa fa-users"></i> <span>Users</span></a></li>
             <li><a href="<?php echo $projectRoot ?>pages/listings"><i class="fa fa-home"></i> <span>Listings</span></a></li>
             <li><a href="#"><i class="fa fa-comment"></i> <span>Requests</span></a></li>
-            <li><a href="#"><i class="fa  fa-wrench"></i> <span>Admins</span></a></li>
+            <li><a href="<?php echo $projectRoot ?>pages/admins"><i class="fa  fa-wrench"></i> <span>Admins</span></a></li>
 <!--             <li class="treeview">
               <a href="#"><i class="fa fa-link"></i> <span>Multilevel</span> <i class="fa fa-angle-left pull-right"></i></a>
               <ul class="treeview-menu">
