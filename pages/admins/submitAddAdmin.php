@@ -3,8 +3,18 @@
 $projectRoot = "../../";
 include_once($projectRoot."/includes/functions.php");
 
-echo $_POST["nameField"];
-echo $_POST["emailField"];
-echo $_POST["passwordField"];
+$adminName = $_POST["nameField"];
+$adminEmail = $_POST["emailField"];
+$password = hash("sha256", $_POST["passwordField"], false);
+
+$item = array(
+  "Email" => array('S' => $adminEmail),
+  "AdminName" => array('S' => $adminName),
+  "Password" => array('S' => $password),
+  );
+
+addToAdminDB($item);
+
+header('Location: ./');
 
 ?>

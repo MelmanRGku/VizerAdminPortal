@@ -39,15 +39,14 @@ $allAdmins = getAllAdmins();
 
                 <?php
 
-                // foreach($allListings as $listing)
-                // {
-                //   echo "<tr>";
-                //   echo "<td>".$listing["Address"]["S"]."</td>";
-                //   echo "<td>".$listing["City"]["S"]."</td>";
-                //   echo "<td>".$listing["UserEmail"]["S"]."</td>";
-                //   echo '<td><button type="button" class="btn btn-block btn-warning">Edit</button></td>';
-                //   echo "</tr>";
-                // }
+                foreach($allAdmins as $admin)
+                {
+                  echo "<tr>";
+                  echo "<td>".$admin["AdminName"]["S"]."</td>";
+                  echo "<td>".$admin["Email"]["S"]."</td>";
+                  echo '<td><button type="button" class="btn btn-block btn-warning">Edit</button></td>';
+                  echo "</tr>";
+                }
 
                 ?>
                 

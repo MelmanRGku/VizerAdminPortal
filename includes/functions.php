@@ -25,7 +25,8 @@ function getDBConnection()
     'secret' => 'O+SBFW0nkY1Z9sYez53x4uRo4d9ZAZcN9Ze2TA1M'
     ],
     'http'    => [
-        'verify' => $projectRoot .'includes/awsSDK/ca-bundle.crt'
+        'verify' => 'C:\wamp\www\ca-bundle.crt'
+        #$projectRoot .'includes/awsSDK/ca-bundle.crt'
     ]
     ]);
 
@@ -47,7 +48,8 @@ function getS3Connection()
     'secret' => 'O+SBFW0nkY1Z9sYez53x4uRo4d9ZAZcN9Ze2TA1M'
     ],
     'http'    => [
-        'verify' => $projectRoot .'includes/awsSDK/ca-bundle.crt'
+        'verify' => 'C:\wamp\www\ca-bundle.crt'
+        #$projectRoot .'includes/awsSDK/ca-bundle.crt'
     ]
 ]);
 
@@ -74,6 +76,26 @@ function addToListingDB($item)
     	echo "Unable to add item:\n";
     	echo $e->getMessage() . "\n";
 	}
+}
+
+function addToAdminDB($item)
+{
+    $sdkConn = getDBConnection();
+    $dynamodb = $sdkConn->createDynamoDb();
+    $marshaler = new Marshaler();
+
+    $params = [
+        'TableName' => 'Admin',
+        'Item' => $item
+    ];
+
+    try {
+        $result = $dynamodb->putItem($params);
+
+    } catch (DynamoDbException $e) {
+        echo "Unable to add item:\n";
+        echo $e->getMessage() . "\n";
+    }
 }
 
 function getAllListings()
@@ -103,6 +125,24 @@ function getAllAdmins()
     $returnArr = iterator_to_array($iterator);
 
     return $returnArr;
+}
+
+function getAdminPassword($email)
+{
+    $sdkConn = getDBConnection();
+    $dynamodb = $sdkConn->createDynamoDb();
+
+    $item = $dynamodb->getItem(array( 
+        'TableName'     => 'Admin',
+        'ConsistentRead' => true,
+        'Key' => [
+            'Email' => array('S' => $email),
+        ],
+    ));
+
+    $returnPass = $item['Item']['Password']['S'];
+
+    return $returnPass;
 }
 
 function uploadImage($imageAddrs, $imgID)
