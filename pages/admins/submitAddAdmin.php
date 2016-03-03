@@ -1,5 +1,10 @@
 <?php
 
+session_start();
+if (!isset($_SESSION['state'])) {
+  header('Location: ../../login/');
+}
+
 $projectRoot = "../../";
 include_once($projectRoot."/includes/functions.php");
 

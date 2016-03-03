@@ -98,7 +98,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         </a>
                       </li>
                       <li>
-                        <a href="#">
+                        <a href="../login/logout.php">
                           Signout
                         </a>
                       </li>
