@@ -1,8 +1,13 @@
 <?php
 
+session_start();
+if (!isset($_SESSION['state'])) {
+  header('Location: ../../login/');
+}
+
 $projectRoot = "../../";
 include_once($projectRoot."/template/header.php");
-include_once($projectRoot."/includes/function.php");
+include_once($projectRoot."/includes/functions.php");
 
 ?>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>

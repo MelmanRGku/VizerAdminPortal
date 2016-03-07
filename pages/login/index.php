@@ -1,3 +1,7 @@
+<?php
+session_unset();
+session_start();
+?>
 <!DOCTYPE html>
 <html>
   <head>
@@ -31,13 +35,24 @@
       </div><!-- /.login-logo -->
       <div class="login-box-body">
         <p class="login-box-msg">Sign in to start your session</p>
-        <form action="../listings/" method="post">
+        <?php if(isset($_SESSION['pass'])) : ?>
+            <div class="alert alert-danger alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                <h4><i class="icon fa fa-ban"></i> Alert!</h4>
+                Incorrect Email/Password combination
+            </div>
+        <?php endif; ?>
+        <!--?php
+        print_r($_SESSION);
+        ?-->
+        <form action="./verifyLogin.php" method="post">
+        <!--form action="../listings/" method="post"-->
           <div class="form-group has-feedback">
-            <input type="email" class="form-control" placeholder="Email">
+            <input type="email" class="form-control" placeholder="Email" name="emailField" required>
             <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
           </div>
           <div class="form-group has-feedback">
-            <input type="password" class="form-control" placeholder="Password">
+            <input type="password" class="form-control" placeholder="Password" name="passwordField" required>
             <span class="glyphicon glyphicon-lock form-control-feedback"></span>
           </div>
           <div class="row">

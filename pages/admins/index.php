@@ -1,5 +1,10 @@
 <?php
 
+session_start();
+if (!isset($_SESSION['state'])) {
+  header('Location: ../login/');
+}
+
 $projectRoot = "../../";
 include_once($projectRoot."/template/header.php");
 include_once($projectRoot."/includes/functions.php");
@@ -39,15 +44,14 @@ $allAdmins = getAllAdmins();
 
                 <?php
 
-                // foreach($allListings as $listing)
-                // {
-                //   echo "<tr>";
-                //   echo "<td>".$listing["Address"]["S"]."</td>";
-                //   echo "<td>".$listing["City"]["S"]."</td>";
-                //   echo "<td>".$listing["UserEmail"]["S"]."</td>";
-                //   echo '<td><button type="button" class="btn btn-block btn-warning">Edit</button></td>';
-                //   echo "</tr>";
-                // }
+                foreach($allAdmins as $admin)
+                {
+                  echo "<tr>";
+                  echo "<td>".$admin["AdminName"]["S"]."</td>";
+                  echo "<td>".$admin["Email"]["S"]."</td>";
+                  echo '<td><button type="button" class="btn btn-block btn-warning">Edit</button></td>';
+                  echo "</tr>";
+                }
 
                 ?>
                 
