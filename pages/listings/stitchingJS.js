@@ -11,7 +11,7 @@ var sphereIntersect = null;
 var clock = new THREE.Clock();
 
 init();
-setScene();
+setScene("./images/kitchen.JPG");
 animate();
 
 function init() {
@@ -56,12 +56,12 @@ function resize() {
   renderer.setSize(width, height);
 }
 
-function setScene(){
+function setScene(imagePath){
 
   sphere = new THREE.Mesh(
     new THREE.SphereGeometry(100, 60, 60),
     new THREE.MeshBasicMaterial({
-    map: THREE.ImageUtils.loadTexture("./images/kitchen.JPG")
+    map: THREE.ImageUtils.loadTexture(imagePath)
   })
   );
   sphere.material.side = THREE.DoubleSide
@@ -71,8 +71,16 @@ function setScene(){
 
 }
 
+function clearScene()
+{
+  scene.remove(sphere);
+  sphere.material.map.dispose();
+  sphere.material.dispose();
+  sphere.geometry.dispose();
+}
+
 function update(dt) {
-  // resize();
+  resize();
 
   camera.updateProjectionMatrix();
 
@@ -109,6 +117,8 @@ function animate(t) {
 $(".imgThumb").live("click", function(e){
     console.log(e.target);
     $("#VRview").attr("src",e.target.src);
+    clearScene();
+    setScene(e.target.src);
 });
 
 
@@ -134,8 +144,8 @@ function imageUpload(input)
      // }
 
      $('#imageList').prepend('<div class="imgThumb" style="cursor:pointer"> \
-        <div class="col-md-3"> <p style="text-align:center"> \
-        <img src="'+ e.target.result + '"alt="..." style="max-width:200px"> \
+        <div class="col-md-12"> <p style="text-align:center"> \
+        <img src="'+ e.target.result + '"alt="..." style="max-width:100%"> \
         Living Room </p> \
         </div>\
         </div>');

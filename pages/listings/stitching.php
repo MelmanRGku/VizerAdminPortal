@@ -26,9 +26,11 @@ include_once($projectRoot."/template/header.php");
   </section>
 
   <!-- Main content -->
-  <section class="content">
-
     <!-- Your Page Content Here -->
+  <section class="content">
+    <div class="row">
+      <div class="col-md-8">
+
       <div class="box box-default color-palette-box">
         <div class="box-header">
           <input type="text" class="form-control" id="roomNameField" placeholder="Room name">
@@ -37,12 +39,11 @@ include_once($projectRoot."/template/header.php");
         <!-- /.box-header -->
         <div class="box-body">
           <!-- <img  id="VRview" src="./images/frontdoor.JPG" alt="Mountain View" style="max-width:100%;max-height:100%;"> -->
-          <div id="vrElement" style="height:400px;"></div>
+          <div id="vrElement" style="width=200px; height:500px;"></div>
         </div>
         <!-- /.box-body -->
       </div>
-
-      <div class="box box-default color-palette-box">
+<div class="box box-default color-palette-box">
         <!-- /.box-header -->
         <div class="box-body">
           <div style="height:0px;overflow:hidden">
@@ -55,22 +56,30 @@ include_once($projectRoot."/template/header.php");
           <button type="button" class="btn btn-primary">Remove Bubble</button>
         </div>
         <!-- /.box-body -->
-      </div>      
+      </div>   
 
+    </div>
+
+    <div class="col-md-4">
       <div class="box box-default color-palette-box">
         <!-- /.box-header -->
-        <div class="box-body" id='imageList'>
-  <!--       <div class="imgThumb">
-          <div class="col-sm-4 col-md-2" style="margin-top:10px; margin-right:20px; margin-left:20px" >
+        <div class="box-body">
+          <div class="pre-scrollable" id='imageList' style="max-height:600px;">
+
+<!--         <div class="imgThumb">
+          <div class="col-md-9" >
             <img src="./images/hallway.JPG" alt="..." style="max-width:200px">
             <center>Living Room</center>
           </div>
         </div>
-          <div class="col-sm-4 col-md-2"  style="margin-top:10px; margin-right:20px; margin-left:20px" >
+
+                <div class="imgThumb">
+          <div class="col-md-9" >
             <img src="./images/hallway.JPG" alt="..." style="max-width:200px">
             <center>Living Room</center>
           </div>
-          <div class="col-sm-4 col-md-2" style="margin-top:10px; margin-right:20px; margin-left:20px">
+        </div> -->
+<!--           <div class="col-sm-4 col-md-2"  style="margin-top:10px; margin-right:20px; margin-left:20px" >
             <img src="./images/hallway.JPG" alt="..." style="max-width:200px">
             <center>Living Room</center>
           </div>
@@ -82,11 +91,19 @@ include_once($projectRoot."/template/header.php");
             <img src="./images/hallway.JPG" alt="..." style="max-width:200px">
             <center>Living Room</center>
           </div> -->
+<!--           <div class="col-sm-4 col-md-2" style="margin-top:10px; margin-right:20px; margin-left:20px">
+            <img src="./images/hallway.JPG" alt="..." style="max-width:200px">
+            <center>Living Room</center>
+          </div> -->
 
             <!-- /.box-body -->
           </div>
+          </div>
         </div>
       </div>
+
+
+  </div>
 
   </section><!-- /.content -->
 </div><!-- /.content-wrapper -->
