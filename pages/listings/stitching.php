@@ -4,6 +4,12 @@ $projectRoot = "../../";
 include_once($projectRoot."/template/header.php");
 ?>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+<script src="./threejs/three.js"></script>
+<script src="./threejs/StereoEffect.js"></script>
+<script src="./threejs/DeviceOrientationControls.js"></script>
+<script src="./threejs/OrbitControls.js"></script>
+<script src="./threejs/Detector.js"></script> 
+<script src="./threejs/RoomObjs.js"></script>  
 
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
@@ -25,12 +31,13 @@ include_once($projectRoot."/template/header.php");
     <!-- Your Page Content Here -->
       <div class="box box-default color-palette-box">
         <div class="box-header">
-          <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Room name">
+          <input type="text" class="form-control" id="roomNameField" placeholder="Room name">
         </div>
 
         <!-- /.box-header -->
         <div class="box-body">
-          <img  id="VRview" src="./images/frontdoor.JPG" alt="Mountain View" style="max-width:100%;max-height:100%;">
+          <!-- <img  id="VRview" src="./images/frontdoor.JPG" alt="Mountain View" style="max-width:100%;max-height:100%;"> -->
+          <div id="vrElement" style="height:400px;"></div>
         </div>
         <!-- /.box-body -->
       </div>
