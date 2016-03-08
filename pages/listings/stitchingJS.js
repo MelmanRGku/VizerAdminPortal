@@ -127,10 +127,12 @@ function uploadButtonClicked()
   $("#fileInput").click();
 }
 
+var roomCounter = 1;
 function imageUpload(input)
 {
   if (input.files) {
     console.log(input.files)
+
 
     for(var i = 0; i < input.files.length; i++){
       var reader = new FileReader();
@@ -146,7 +148,7 @@ function imageUpload(input)
      $('#imageList').prepend('<div class="imgThumb" style="cursor:pointer"> \
         <div class="col-md-12"> <p style="text-align:center"> \
         <img src="'+ e.target.result + '"alt="..." style="max-width:100%"> \
-        Living Room </p> \
+        Room '+ roomCounter++ +' </p> \
         </div>\
         </div>');
      }
