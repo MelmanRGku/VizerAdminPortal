@@ -33,7 +33,8 @@ include_once($projectRoot."/template/header.php");
 
       <div class="box box-default color-palette-box">
         <div class="box-header">
-          <input type="text" class="form-control" id="roomNameField" placeholder="Room name">
+          <!-- <input type="text" class="form-control" id="roomNameField" placeholder="Room name"> -->
+          <h2 id="roomName" class="box-title">asd </h2> <i onclick="nameEditClick()" style="cursor:pointer" class="fa fa-fw fa-edit"></i>
         </div>
 
         <!-- /.box-header -->
@@ -47,9 +48,9 @@ include_once($projectRoot."/template/header.php");
         <!-- /.box-header -->
         <div class="box-body">
           <div style="height:0px;overflow:hidden">
-            <input type="file" id="fileInput" accept="image/*" id="fileInput" multiple/>
+            <input type="file" id="fileInput" accept="image/*" multiple/>
           </div>
-          <input type="button" class="btn btn-primary" id onclick="uploadButtonClicked()" value="Upload Images"></input>
+          <input type="button" class="btn btn-primary" onclick="uploadButtonClicked()" value="Upload Images"></input>
           <button type="button" class="btn btn-primary">Add Link</button>
           <button type="button" class="btn btn-primary">Remove Link</button>
           <button type="button" class="btn btn-primary">Add Bubble</button>

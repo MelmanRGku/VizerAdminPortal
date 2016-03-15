@@ -1,10 +1,11 @@
 "use strict";
 
 class Room{
-	constructor(id, image)
+	constructor(id, name, image)
 	{
 		"use strict";
 		this.id = id;
+		this.name = name;
 		this.image = image;
 		this.links = new Array();
 	}
