@@ -40,6 +40,7 @@ $allUsers = getAllUsers();
                 <tbody><tr>
                   <th>Name</th>
                   <th>Email</th>
+                  <th>Phone</th>
                 </tr>
 
                 <?php
@@ -49,7 +50,7 @@ $allUsers = getAllUsers();
                   echo "<tr>";
                   echo "<td>".$user["Name"]["S"]."</td>";
                   echo "<td>".$user["Email"]["S"]."</td>";
-                  echo '<td><button type="button" class="btn btn-block btn-warning">Edit</button></td>';
+                  echo "<td>".$user["ContactPhone"]["S"]."</td>";
                   echo "</tr>";
                 }
 

@@ -19,7 +19,7 @@ else
 	$item["Item"]["Handeled"]["BOOL"] = false;
 }
 $time = getdate();
-$item["Item"]["LastEditedOn"]["S"] = $time["mday"]."/".$time["mon"]."/".$time["year"];
+$item["Item"]["LastEditedOn"]["S"] = $time["year"]."/".$time["mon"]."/".$time["mday"];
 $item["Item"]["LastEditedBy"]["S"] = getAdminName($_SESSION['user']);
 
 addToRequestDB($item["Item"]);
