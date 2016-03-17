@@ -40,7 +40,7 @@ include_once($projectRoot."/template/header.php");
         <!-- /.box-header -->
         <div class="box-body">
           <!-- <img  id="VRview" src="./images/frontdoor.JPG" alt="Mountain View" style="max-width:100%;max-height:100%;"> -->
-          <div id="vrElement" style="width=200px; height:500px;"></div>
+          <div id="vrElement" onmousemove="vrViewerMouseMove(event)" onmousedown="vrViewerMouseDown(event)" onmouseup="vrViewerMouseUp(event)" onmouseleave="vrViewerMouseUp(event)" style="width=200px; height:500px;"></div>
         </div>
         <!-- /.box-body -->
       </div>
@@ -51,7 +51,7 @@ include_once($projectRoot."/template/header.php");
             <input type="file" id="fileInput" accept="image/*" multiple/>
           </div>
           <input type="button" class="btn btn-primary" onclick="uploadButtonClicked()" value="Upload Images"></input>
-          <button type="button" class="btn btn-primary">Add Link</button>
+          <button type="button" class="btn btn-primary" onclick="addLinkClick()">Add Link</button>
           <button type="button" class="btn btn-primary">Remove Link</button>
           <button type="button" class="btn btn-primary">Add Bubble</button>
           <button type="button" class="btn btn-primary">Remove Bubble</button>

@@ -8,6 +8,8 @@ var mouse = new THREE.Vector2(-1, -1);
 var raycaster = new THREE.Raycaster();
 var sphereIntersect = null;
 var rooms = [];
+var selectedLink = null;
+var clickOnLink = false;
 
 var clock = new THREE.Clock();
 
@@ -29,7 +31,7 @@ function init() {
   scene = new THREE.Scene();
 
   camera = new THREE.PerspectiveCamera(90, 1, 0.001, 700);
-  camera.position.set(0, 0.01, 0);
+  camera.position.set(0, 0.0, 0);
   scene.add(camera);
 
   controls = new THREE.OrbitControls(camera, element);
@@ -42,6 +44,7 @@ function init() {
   controls.noZoom = true;
   controls.noPan = true;
   controls.enabled = true;
+  // controls.noRotate = true;
 
   window.addEventListener('resize', resize, false);
   setTimeout(resize, 1);
@@ -60,6 +63,7 @@ function resize() {
 function setScene(room){
 
   clearScene();
+  currentRoom = room;
 
   sphere = new THREE.Mesh(
     new THREE.SphereGeometry(100, 60, 60),
@@ -73,17 +77,25 @@ function setScene(room){
   scene.add(sphere);
 
   document.getElementById("roomName").innerHTML = room.name;
-  currentRoom = room;
 
 }
 
 function clearScene()
 {
-  if(sphere != null){
+  if(currentRoom != null){
     scene.remove(sphere);
     sphere.material.map.dispose();
     sphere.material.dispose();
     sphere.geometry.dispose();
+    
+    for(i = 0; i < currentRoom.links.length; i++)
+    { 
+      scene.remove(currentRoom.links[i].linkSprite);
+      currentRoom.links[i].linkSprite.geometry.dispose();  
+      currentRoom.links[i].linkSprite.material.map.dispose();
+      currentRoom.links[i].linkSprite.material.dispose();  
+    }
+
     currentRoom = null;
   }
 }
@@ -187,5 +199,184 @@ function imageUpload(input)
 
      reader.readAsDataURL(input.files[i])
     }
+  }
+}
+
+function generateLinkSprite()
+{
+  var canvas = document.createElement( 'canvas' );
+  canvas.width = 120;
+  canvas.height = 120;
+
+  var context = canvas.getContext( '2d' );
+
+  var centerX = canvas.width / 2;
+  var centerY = canvas.height / 2;
+  var radius = 50;
+
+  context.beginPath();
+  context.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
+  context.fillStyle = '#F0C400';
+  context.fill();
+  context.lineWidth = 10;
+  context.strokeStyle = '#000000'; 
+  context.stroke();
+
+  return canvas; 
+}
+
+function getCameraLookAtVec()
+{
+  var cameraLookatVec = new THREE.Vector3( 0, 0, -1 );
+  cameraLookatVec.applyQuaternion( camera.quaternion );
+  cameraLookatVec.normalize();
+
+  return cameraLookatVec;
+}
+
+function addLinkClick2()
+{
+  // console.log(getCameraLookAtVec());
+  var cameraLookatVec = getCameraLookAtVec();
+
+  var texture = new THREE.Texture( generateLinkSprite() );
+  texture.needsUpdate = true; // important!
+
+  var material = new THREE.SpriteMaterial( { map: texture } );
+  var linkSprite = new THREE.Sprite( material );
+  linkSprite.scale.set(10,10,10);
+
+  cameraLookatVec.multiplyScalar(90);
+
+  linkSprite.position.set(cameraLookatVec.x, cameraLookatVec.y, cameraLookatVec.z);
+  scene.add(linkSprite);
+
+  var sphericalPosition = cartesianToSpherical(cameraLookatVec);
+  
+  var link = new RoomLink(0, sphericalPosition.y, sphericalPosition.z);
+  link.linkSprite = linkSprite;
+
+  currentRoom.links.push(link);
+}
+
+function addLinkClick()
+{
+  // console.log(getCameraLookAtVec());
+  var cameraLookatVec = getCameraLookAtVec();
+  cameraLookatVec.multiplyScalar(90);
+  console.log(cameraLookatVec);
+
+  var sphericalPosition = cartesianToSpherical(cameraLookatVec);
+  
+  link = new RoomLink(0, sphericalPosition.x, sphericalPosition.y);
+
+  currentRoom.links.push(link);
+  addLinkToScene(link);
+}
+
+
+function addLinkToScene(link)
+{
+  var texture = new THREE.Texture( generateLinkSprite() );
+  texture.needsUpdate = true; // important!
+
+  var material = new THREE.SpriteMaterial( { map: texture } );
+  link.linkSprite = new THREE.Sprite( material );
+  link.linkSprite.scale.set(10,10,10);
+
+  cartesianPosition = sphericalToCartesian(90, link.theta, link.phi);
+
+  link.linkSprite.position.set(cartesianPosition.x, cartesianPosition.y, cartesianPosition.z);
+  scene.add(link.linkSprite);
+
+}
+
+function sphericalToCartesian(radius, theta, phi)
+{
+  var xPos = radius * Math.sin(phi) * Math.cos(theta);
+  var yPos = radius * Math.sin(theta) * Math.sin(phi);
+  var zPos = radius * Math.cos(phi);
+
+  return new THREE.Vector3(xPos,yPos,zPos);
+}
+
+
+function cartesianToSpherical(vec)
+{
+  var r = vec.distanceTo( new THREE.Vector3(0.0, 0.0, 0.0) ) ;
+  var phi = Math.acos(vec.z / r);
+  var theta = Math.atan2(vec.y, vec.x);
+
+  return new THREE.Vector2(theta , phi);
+}
+
+function toRadians (angle) {
+  return angle * (Math.PI / 180);
+}
+
+function toDegrees (radians) {
+  return radians * 180 / Math.PI;
+}
+
+function getIntersectedObjects(event)
+{
+  var offset = $('#vrElement').offset();
+  mouse.x = ( ( event.clientX - offset.left + $(window).scrollLeft() ) / $('#vrElement').width() ) * 2 - 1;
+  mouse.y = - ( ( event.clientY - offset.top + $(window).scrollTop() ) / $('#vrElement').height() ) * 2 + 1;
+
+  raycaster.setFromCamera( mouse, camera ); 
+
+  // calculate objects intersecting the picking ray
+  var intersects = raycaster.intersectObjects( scene.children );
+
+  return intersects;
+}
+
+function vrViewerMouseDown(event){
+
+  var intersects = getIntersectedObjects(event);
+  
+  for ( var i = 0; i < intersects.length; i++ ) {
+    for ( var j = 0; j < currentRoom.links.length; j++){
+      
+      if(intersects[ i ].object == currentRoom.links[j].linkSprite){
+        selectedLink = currentRoom.links[j];
+        // controls.noRotate = true;
+        clickOnLink = true;
+      }
+
+    }
+  }
+}
+
+function vrViewerMouseUp(event){
+  clickOnLink = false;
+  // console.log(controls.norotate);
+  // controls.noRotate = false;
+}
+
+function vrViewerMouseMove(event){
+
+  if(clickOnLink == true && selectedLink != null)
+  {
+    var intersects = getIntersectedObjects(event);
+    
+    for ( var i = 0; i < intersects.length; i++ ) {
+      if(intersects[ i ].object == sphere){
+        sphereIntersect = cartesianToSpherical(intersects[i].point);
+      }
+    }
+
+    var distRadius = 90;
+    var theta = sphereIntersect.x;
+    var phi = sphereIntersect.y;
+
+    selectedLink.theta = theta;
+    selectedLink.phi = phi;
+
+    var cartesianPosition = sphericalToCartesian(distRadius, theta,phi);
+
+    // console.log(cartesianPosition);
+    selectedLink.linkSprite.position.set(cartesianPosition.x,cartesianPosition.y,cartesianPosition.z);
   }
 }
