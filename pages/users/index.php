@@ -9,7 +9,7 @@ $projectRoot = "../../";
 include_once($projectRoot."/template/header.php");
 include_once($projectRoot."/includes/functions.php");
 
-$allAdmins = getAllAdmins();
+$allUsers = getAllUsers();
 // print_r($allAdmins);
 
 ?>
@@ -19,12 +19,12 @@ $allAdmins = getAllAdmins();
   <!-- Content Header (Page header) -->
   <section class="content-header">
     <h1>
-      Admins
-      <small>Manage Admins</small>
+      Users
+      <small>Manage Users</small>
     </h1>
     <ol class="breadcrumb">
       <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-      <li class="active">Admins</li>
+      <li class="active">Users</li>
     </ol>
   </section>
 
@@ -33,8 +33,6 @@ $allAdmins = getAllAdmins();
 
     <div class="row">
     <!-- Your Page Content Here -->
-  
-
     <div class="col-md-8">
     <div class="box">
             <div class="box-body">
@@ -42,15 +40,17 @@ $allAdmins = getAllAdmins();
                 <tbody><tr>
                   <th>Name</th>
                   <th>Email</th>
+                  <th>Phone</th>
                 </tr>
 
                 <?php
 
-                foreach($allAdmins as $admin)
+                foreach($allUsers as $user)
                 {
                   echo "<tr>";
-                  echo "<td>".$admin["AdminName"]["S"]."</td>";
-                  echo "<td>".$admin["Email"]["S"]."</td>";
+                  echo "<td>".$user["Name"]["S"]."</td>";
+                  echo "<td>".$user["Email"]["S"]."</td>";
+                  echo "<td>".$user["ContactPhone"]["S"]."</td>";
                   echo "</tr>";
                 }
 
@@ -61,7 +61,7 @@ $allAdmins = getAllAdmins();
             </div>
             <!-- /.box-body -->
             <div class="box-footer clearfix">
-              <a type="button" href="./newAdmin.php" class="btn btn-success">Add Admin</a>
+              <a type="button" href="./newAdmin.php" class="btn btn-success">Add User</a>
             </div>
           </div>
         </div>

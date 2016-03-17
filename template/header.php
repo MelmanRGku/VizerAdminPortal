@@ -1,3 +1,10 @@
+<?php
+
+$projectRoot = "../../";
+include_once($projectRoot."/includes/functions.php");
+
+?>
+
 <!DOCTYPE html>
 <!--
 This is a starter template page. Use this page to start your new project from
@@ -80,7 +87,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
               <!-- User Account Menu -->
               <li>
                  <a href="#" >
-                  <span> Fadi Botros</span>
+                  <span><?php print_r(getAdminName($_SESSION['user'])); ?></span>
                 </a>
               </li>
 
@@ -93,7 +100,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <!-- inner menu: contains the actual data -->
                     <ul class="menu">
                       <li>
-                        <a href="#">
+                        <a href="../admins/editAdmin.php">
                           Change Password
                         </a>
                       </li>
@@ -150,9 +157,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <!-- Optionally, you can add icons to the links -->
             <!-- <li class="active"><a href="#"><i class="fa fa-link"></i> <span>Link</span></a></li> -->
             <li><a href="#"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a></li>
-            <li><a href="#"><i class="fa fa-users"></i> <span>Users</span></a></li>
+            <li><a href="<?php echo $projectRoot ?>pages/users"><i class="fa fa-users"></i> <span>Users</span></a></li>
             <li><a href="<?php echo $projectRoot ?>pages/listings"><i class="fa fa-home"></i> <span>Listings</span></a></li>
-            <li><a href="#"><i class="fa fa-comment"></i> <span>Requests</span></a></li>
+            <li><a href="<?php echo $projectRoot ?>pages/requests"><i class="fa fa-comment"></i> <span>Requests</span></a></li>
             <li><a href="<?php echo $projectRoot ?>pages/admins"><i class="fa  fa-wrench"></i> <span>Admins</span></a></li>
 <!--             <li class="treeview">
               <a href="#"><i class="fa fa-link"></i> <span>Multilevel</span> <i class="fa fa-angle-left pull-right"></i></a>

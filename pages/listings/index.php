@@ -9,8 +9,12 @@ $projectRoot = "../../";
 include_once($projectRoot."/template/header.php");
 include_once($projectRoot."/includes/functions.php");
 
-$allListings =  getAllListings();
-// print_r($allListings);
+$allListings = getAllListings();
+
+if(isset($_SESSION['searchListings'])) {
+  $allListings = getUsersListings($_SESSION['searchListings']);
+}
+
 ?>
 
 <!-- Content Wrapper. Contains page content -->
@@ -35,11 +39,13 @@ $allListings =  getAllListings();
     <div class="col-md-10">
     <div class="box">
             <div class="box-header with-border">
-              <div class="col-sm-5">
-                <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Address, city, etc.">
-              </div>
-              <button type="button" class="btn btn-primary">Search</button>
-              <a type="button" href="./newListing.php" class="btn btn-success">New Listing</a>
+              <form action="./searchListings.php" method="post">
+                <div class="col-sm-5">
+                  <input type="email" class="form-control" placeholder="Email" name="emailField" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Search</button>
+                <a type="button" href="./newListing.php" class="btn btn-success">New Listing</a>
+              </form>
             </div>
             <!-- /.box-header -->
             <div class="box-body">
@@ -53,14 +59,30 @@ $allListings =  getAllListings();
 
                 <?php
 
-                foreach($allListings as $listing)
+                if(isset($_SESSION['searchListings']))
                 {
-                  echo "<tr>";
-                  echo "<td>".$listing["Address"]["S"]."</td>";
-                  echo "<td>".$listing["City"]["S"]."</td>";
-                  echo "<td>".$listing["UserEmail"]["S"]."</td>";
-                  echo '<td><button type="button" class="btn btn-block btn-warning">Edit</button></td>';
-                  echo "</tr>";
+                  foreach($allListings["Items"] as $listing)
+                  {
+                    echo "<tr>";
+                    echo "<td>".$listing["Address"]["S"]."</td>";
+                    echo "<td>".$listing["City"]["S"]."</td>";
+                    echo "<td>".$listing["UserEmail"]["S"]."</td>";
+                    echo '<td><button type="button" class="btn btn-block btn-warning">Edit</button></td>';
+                    echo "</tr>";
+                  }
+                  unset($_SESSION['searchListings']);
+                }
+                else
+                {
+                foreach($allListings as $listing)
+                  {
+                    echo "<tr>";
+                    echo "<td>".$listing["Address"]["S"]."</td>";
+                    echo "<td>".$listing["City"]["S"]."</td>";
+                    echo "<td>".$listing["UserEmail"]["S"]."</td>";
+                    echo '<td><button type="button" class="btn btn-block btn-warning">Edit</button></td>';
+                    echo "</tr>";
+                  }
                 }
 
                 ?>

@@ -11,6 +11,7 @@ $truePassword = getAdminPassword($email);
 if (strcmp ($password, $truePassword) == 0) {
   session_unset();
   $_SESSION["state"] = "active";
+  $_SESSION["user"] = $email;
   header('Location: ../listings/');
 }
 else {

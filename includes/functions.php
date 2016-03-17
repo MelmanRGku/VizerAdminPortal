@@ -98,6 +98,26 @@ function addToAdminDB($item)
     }
 }
 
+function addToRequestDB($item)
+{
+    $sdkConn = getDBConnection();
+    $dynamodb = $sdkConn->createDynamoDb();
+    $marshaler = new Marshaler();
+
+    $params = [
+        'TableName' => 'Request',
+        'Item' => $item
+    ];
+
+    try {
+        $result = $dynamodb->putItem($params);
+
+    } catch (DynamoDbException $e) {
+        echo "Unable to add item:\n";
+        echo $e->getMessage() . "\n";
+    }
+}
+
 function getAllListings()
 {
 	$sdkConn = getDBConnection();
@@ -127,6 +147,89 @@ function getAllAdmins()
     return $returnArr;
 }
 
+function getAllUsers()
+{
+    $sdkConn = getDBConnection();
+    $dynamodb = $sdkConn->createDynamoDb();
+
+    $iterator = $dynamodb->getIterator('Scan', array( 
+        'TableName'     => 'User',
+        ));
+
+    $returnArr = iterator_to_array($iterator);
+
+    return $returnArr;
+}
+
+function getAllRequests()
+{
+    $sdkConn = getDBConnection();
+    $dynamodb = $sdkConn->createDynamoDb();
+
+    $iterator = $dynamodb->getIterator('Scan', array( 
+        'TableName'     => 'Request',
+        ));
+
+    $returnArr = iterator_to_array($iterator);
+
+    return $returnArr;
+}
+
+function getAllRequestsSorted($index)
+{
+    $sdkConn = getDBConnection();
+    $dynamodb = $sdkConn->createDynamoDb();
+
+    $iterator = $dynamodb->getIterator('Scan', array( 
+        'TableName'     => 'Request',
+        'IndexName'     => $index
+        ));
+
+    $returnArr = iterator_to_array($iterator);
+
+    return $returnArr;
+}
+
+function getUsersListings($email)
+{
+    $sdkConn = getDBConnection();
+    $dynamodb = $sdkConn->createDynamoDb();
+
+    $iterator = $dynamodb->query(array( 
+        'TableName'     => 'Listing',
+        'IndexName'     => 'UserEmail-index',
+        'KeyConditionExpression' => 'UserEmail = :v_id',
+        'ExpressionAttributeValues' =>  [
+        ':v_id' => [
+            'S' => $email]
+        ],
+    ));
+
+    $returnArr = iterator_to_array($iterator);
+
+    return $returnArr;
+}
+
+function getUsersRequests($email)
+{
+    $sdkConn = getDBConnection();
+    $dynamodb = $sdkConn->createDynamoDb();
+
+    $iterator = $dynamodb->query(array( 
+        'TableName'     => 'Request',
+        'IndexName'     => 'Email-index',
+        'KeyConditionExpression' => 'Email = :v_id',
+        'ExpressionAttributeValues' =>  [
+        ':v_id' => [
+            'S' => $email]
+        ],
+    ));
+
+    $returnArr = iterator_to_array($iterator);
+
+    return $returnArr;
+}
+
 function getAdminPassword($email)
 {
     $sdkConn = getDBConnection();
@@ -143,6 +246,76 @@ function getAdminPassword($email)
     $returnPass = $item['Item']['Password']['S'];
 
     return $returnPass;
+}
+
+function getAdminName($email)
+{
+    $sdkConn = getDBConnection();
+    $dynamodb = $sdkConn->createDynamoDb();
+
+    $item = $dynamodb->getItem(array( 
+        'TableName'     => 'Admin',
+        'ConsistentRead' => true,
+        'Key' => [
+            'Email' => array('S' => $email),
+        ],
+    ));
+
+    $returnName = $item['Item']['AdminName']['S'];
+
+    return $returnName;
+}
+
+function getAdmin($email)
+{
+    $sdkConn = getDBConnection();
+    $dynamodb = $sdkConn->createDynamoDb();
+
+    $item = $dynamodb->getItem(array( 
+        'TableName'     => 'Admin',
+        'ConsistentRead' => true,
+        'Key' => [
+            'Email' => array('S' => $email),
+        ],
+    ));
+
+    return $item;
+}
+
+function getRequest($id)
+{
+    $sdkConn = getDBConnection();
+    $dynamodb = $sdkConn->createDynamoDb();
+
+    $item = $dynamodb->getItem(array( 
+        'TableName'     => 'Request',
+        'ConsistentRead' => true,
+        'Key' => [
+            'RequestID' => array('S' => $id),
+        ],
+    ));
+
+    return $item;
+}
+
+function updateRequest($id, $status)
+{
+    $sdkConn = getDBConnection();
+    $dynamodb = $sdkConn->createDynamoDb();
+
+    $response = $dynamodb->updateItem(array( 
+        'TableName' => 'ProductCatalog',
+        'Key' => [
+            'RequestID' => array('S' => $id),
+        ],
+        'ExpressionAttributeValues' =>  [
+            'Status' => array('S' => $status),
+            //'Status' => array('S' => $handeled)
+        ] ,
+        'UpdateExpression' => 'updated'
+    ));
+
+    return $response;
 }
 
 function uploadImage($imageAddrs, $imgID)
