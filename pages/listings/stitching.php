@@ -1,9 +1,15 @@
 <?php
 
+session_start();
+if (!isset($_SESSION['state'])) {
+  header('Location: ../login/');
+}
+
 $projectRoot = "../../";
 include_once($projectRoot."/template/header.php");
 ?>
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+<!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script> -->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
 <script src="./threejs/three.js"></script>
 <script src="./threejs/StereoEffect.js"></script>
 <script src="./threejs/DeviceOrientationControls.js"></script>
@@ -51,7 +57,13 @@ include_once($projectRoot."/template/header.php");
             <input type="file" id="fileInput" accept="image/*" multiple/>
           </div>
           <input type="button" class="btn btn-primary" onclick="uploadButtonClicked()" value="Upload Images"></input>
-          <button type="button" class="btn btn-primary" onclick="addLinkClick()">Add Link</button>
+          <div class="btn-group dropup">
+            <a type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" onclick="addLinkClick()">Add Link <span class="caret"></span></a>
+              <span class="sr-only">Toggle Dropdown</span>
+            </button>
+            <ul id="linkDropDownMenu" class="dropdown-menu" >
+            </ul>
+          </div>
           <button type="button" class="btn btn-primary">Remove Link</button>
           <button type="button" class="btn btn-primary">Add Bubble</button>
           <button type="button" class="btn btn-primary">Remove Bubble</button>

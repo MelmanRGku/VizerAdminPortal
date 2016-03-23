@@ -48,6 +48,7 @@ function init() {
 
   window.addEventListener('resize', resize, false);
   setTimeout(resize, 1);
+ 
 }
 
 function resize() {
@@ -77,6 +78,10 @@ function setScene(room){
   scene.add(sphere);
 
   document.getElementById("roomName").innerHTML = room.name;
+
+  for(var i = 0; i < room.links.length; i++){
+    addLinkToScene(room.links[i]);
+  }
 
 }
 
@@ -133,12 +138,53 @@ function animate(t) {
   render(clock.getDelta());
 }
 
-$(".imgThumb").live("click", function(e){
+// $(".imgThumb").live("click", function(e){
+//     // console.log(e.target.id);
+//     selectedRoom = getRoom(e.target.id);
+//     // console.log(selectedRoom);
+//     clearScene();
+//     setScene(selectedRoom);
+// });
+
+$('body').on('click', '.imgThumb', function(e){
     // console.log(e.target.id);
     selectedRoom = getRoom(e.target.id);
     // console.log(selectedRoom);
     clearScene();
     setScene(selectedRoom);
+});
+
+function updateLinkDropDownMenu()
+{
+  if(rooms.length > 0)
+  {
+    $("#linkDropDownMenu").empty();
+
+    for (var i = 0; i < rooms.length; i++){
+      $("#linkDropDownMenu").append('<li><a id="r' + rooms[i].id + '" class="linkMenuItem">'+ rooms[i].name +'</a></li>');
+    }
+  }
+}
+
+function addLinkClick()
+{
+  updateLinkDropDownMenu();
+}
+
+$('body').on('click', '.linkMenuItem', function(e){
+  roomID = event.target.id.replace(/\D/g,''); //remove letters to get id
+  room = getRoom(roomID);
+
+  var cameraLookatVec = getCameraLookAtVec();
+  cameraLookatVec.multiplyScalar(90);
+  // console.log(cameraLookatVec);
+
+  var sphericalPosition = cartesianToSpherical(cameraLookatVec);
+  
+  link = new RoomLink(roomID, sphericalPosition.x, sphericalPosition.y);
+
+  currentRoom.links.push(link);
+  addLinkToScene(link);
 });
 
 function nameEditClick()
@@ -234,47 +280,6 @@ function getCameraLookAtVec()
   return cameraLookatVec;
 }
 
-function addLinkClick2()
-{
-  // console.log(getCameraLookAtVec());
-  var cameraLookatVec = getCameraLookAtVec();
-
-  var texture = new THREE.Texture( generateLinkSprite() );
-  texture.needsUpdate = true; // important!
-
-  var material = new THREE.SpriteMaterial( { map: texture } );
-  var linkSprite = new THREE.Sprite( material );
-  linkSprite.scale.set(10,10,10);
-
-  cameraLookatVec.multiplyScalar(90);
-
-  linkSprite.position.set(cameraLookatVec.x, cameraLookatVec.y, cameraLookatVec.z);
-  scene.add(linkSprite);
-
-  var sphericalPosition = cartesianToSpherical(cameraLookatVec);
-  
-  var link = new RoomLink(0, sphericalPosition.y, sphericalPosition.z);
-  link.linkSprite = linkSprite;
-
-  currentRoom.links.push(link);
-}
-
-function addLinkClick()
-{
-  // console.log(getCameraLookAtVec());
-  var cameraLookatVec = getCameraLookAtVec();
-  cameraLookatVec.multiplyScalar(90);
-  console.log(cameraLookatVec);
-
-  var sphericalPosition = cartesianToSpherical(cameraLookatVec);
-  
-  link = new RoomLink(0, sphericalPosition.x, sphericalPosition.y);
-
-  currentRoom.links.push(link);
-  addLinkToScene(link);
-}
-
-
 function addLinkToScene(link)
 {
   var texture = new THREE.Texture( generateLinkSprite() );
@@ -299,7 +304,6 @@ function sphericalToCartesian(radius, theta, phi)
 
   return new THREE.Vector3(xPos,yPos,zPos);
 }
-
 
 function cartesianToSpherical(vec)
 {
@@ -376,7 +380,6 @@ function vrViewerMouseMove(event){
 
     var cartesianPosition = sphericalToCartesian(distRadius, theta,phi);
 
-    // console.log(cartesianPosition);
     selectedLink.linkSprite.position.set(cartesianPosition.x,cartesianPosition.y,cartesianPosition.z);
   }
 }
