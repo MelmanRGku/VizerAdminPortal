@@ -40,7 +40,10 @@ include_once($projectRoot."/template/header.php");
       <div class="box box-default color-palette-box">
         <div class="box-header">
           <!-- <input type="text" class="form-control" id="roomNameField" placeholder="Room name"> -->
-          <h2 id="roomName" class="box-title">asd </h2> <i onclick="nameEditClick()" style="cursor:pointer" class="fa fa-fw fa-edit"></i>
+          <h2 id="roomName" class="box-title">asd </h2> 
+          <i onclick="nameEditClick()" style="cursor:pointer" class="fa fa-fw fa-edit"></i>
+
+          <label class="checkbox-inline"><input id="firstRoomCheckBox" type="checkbox" onclick='setFirstRoomClick(this)'; value="">Set as first room</label>
         </div>
 
         <!-- /.box-header -->
@@ -64,9 +67,10 @@ include_once($projectRoot."/template/header.php");
             <ul id="linkDropDownMenu" class="dropdown-menu" >
             </ul>
           </div>
-          <button type="button" class="btn btn-primary">Remove Link</button>
+          <button type="button" class="btn btn-primary" onclick="removeLinkClick()">Remove Link</button>
           <button type="button" class="btn btn-primary">Add Bubble</button>
           <button type="button" class="btn btn-primary">Remove Bubble</button>
+          <button type="button" class="btn btn-success" onclick="doneClick()">Done</button>
         </div>
         <!-- /.box-body -->
       </div>   

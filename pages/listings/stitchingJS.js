@@ -79,6 +79,14 @@ function setScene(room){
 
   document.getElementById("roomName").innerHTML = room.name;
 
+  if(room.firstRoom == true){
+    $('#firstRoomCheckBox').prop('checked', true);
+  }
+  else
+  {
+    $('#firstRoomCheckBox').prop('checked', false);
+  }
+
   for(var i = 0; i < room.links.length; i++){
     addLinkToScene(room.links[i]);
   }
@@ -95,14 +103,19 @@ function clearScene()
     
     for(i = 0; i < currentRoom.links.length; i++)
     { 
-      scene.remove(currentRoom.links[i].linkSprite);
-      currentRoom.links[i].linkSprite.geometry.dispose();  
-      currentRoom.links[i].linkSprite.material.map.dispose();
-      currentRoom.links[i].linkSprite.material.dispose();  
+      removeLink(currentRoom.links[i]);
     }
 
     currentRoom = null;
   }
+}
+
+function removeLink(link)
+{
+  scene.remove(link.linkSprite);
+  link.linkSprite.geometry.dispose();  
+  link.linkSprite.material.map.dispose();
+  link.linkSprite.material.dispose();  
 }
 
 function update(dt) {
@@ -171,6 +184,16 @@ function addLinkClick()
   updateLinkDropDownMenu();
 }
 
+function setFirstRoomClick(event){
+  if( currentRoom != null){
+      for(var i = 0; i < rooms.length; i++){
+        rooms[i].firstRoom = false;
+      }
+
+      currentRoom.firstRoom = true;
+  }
+}
+
 $('body').on('click', '.linkMenuItem', function(e){
   roomID = event.target.id.replace(/\D/g,''); //remove letters to get id
   room = getRoom(roomID);
@@ -198,6 +221,24 @@ function nameEditClick()
   }
 }
 
+function doneClick(){
+
+  var roomsArr = [];
+
+  for(var i = 0; i < rooms.length; i++)
+  {
+    roomsArr.push(rooms[i].getDict());
+  }
+  // localStorage.setItem("rooms", roomsArr);
+
+    // $('<form action="submitNewListing2.php" method="POST">' + 
+    // '<input type="hidden" name="aid" value="' + roomsArr + '">' +
+    // '</form>').submit();
+
+$.post( "submitNewListing2.php", {rooms: roomsArr}) ;
+
+}
+
 function getRoom(id)
 {
   for(var i = 0; i < rooms.length; i++)
@@ -216,6 +257,18 @@ function uploadButtonClicked()
 $("#fileInput").change(function () {
     imageUpload(this);
 });
+
+function removeLinkClick()
+{
+  if(selectedLink != null)
+  {
+    console.log(currentRoom.links)
+    removeLink(selectedLink);
+    index = currentRoom.links.indexOf(selectedLink);
+    currentRoom.links.splice(index, 1);
+    console.log(currentRoom.links)
+  }
+}
 
 var roomCounter = 1;
 function uploadedNewRoom(e)
