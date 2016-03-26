@@ -78,6 +78,48 @@ function addToListingDB($item)
 	}
 }
 
+function addToRoomDB($item)
+{
+    $sdkConn = getDBConnection();
+    $dynamodb = $sdkConn->createDynamoDb();
+    $marshaler = new Marshaler();
+
+    $params = [
+        'TableName' => 'Room',
+        'Item' => $item
+    ];
+
+    try {
+        $result = $dynamodb->putItem($params);
+        // echo "Added item: $Address\n";
+
+    } catch (DynamoDbException $e) {
+        echo "Unable to add item:\n";
+        echo $e->getMessage() . "\n";
+    }    
+}
+
+function addToLinkDB($item)
+{
+    $sdkConn = getDBConnection();
+    $dynamodb = $sdkConn->createDynamoDb();
+    $marshaler = new Marshaler();
+
+    $params = [
+        'TableName' => 'Link',
+        'Item' => $item
+    ];
+
+    try {
+        $result = $dynamodb->putItem($params);
+        // echo "Added item: $Address\n";
+
+    } catch (DynamoDbException $e) {
+        echo "Unable to add item:\n";
+        echo $e->getMessage() . "\n";
+    }    
+}
+
 function addToAdminDB($item)
 {
     $sdkConn = getDBConnection();

@@ -17,6 +17,7 @@ class Room{
 		dict["id"] = this.id;
 		dict["name"] = this.name;
 		dict["image"] = this.image;
+		dict["firstRoom"] = this.firstRoom;
 
 		var linksArr = [];
 

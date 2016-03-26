@@ -8,7 +8,6 @@ if (!isset($_SESSION['state'])) {
 $projectRoot = "../../";
 include_once($projectRoot."/template/header.php");
 ?>
-<!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script> -->
 <script src="//ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
 <script src="./threejs/three.js"></script>
 <script src="./threejs/StereoEffect.js"></script>
@@ -23,11 +22,13 @@ include_once($projectRoot."/template/header.php");
   <section class="content-header">
     <h1>
       VR Tour Editor
-      <small>Adding and Connecting 360 Pictures</small>
+      <small>Adding and Linking 360 Pictures</small>
     </h1>
     <ol class="breadcrumb">
-      <li><a href="#"><i class="fa fa-dashboard"></i> Level</a></li>
-      <li class="active">Here</li>
+      <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+      <li><a href="./">Listings</a></li>
+      <li><a href="./newListing.php">New Listing</a></li>
+      <li class="active">VR Tour Editor</li>
     </ol>
   </section>
 
@@ -39,21 +40,19 @@ include_once($projectRoot."/template/header.php");
 
       <div class="box box-default color-palette-box">
         <div class="box-header">
-          <!-- <input type="text" class="form-control" id="roomNameField" placeholder="Room name"> -->
-          <h2 id="roomName" class="box-title">asd </h2> 
+          <h2 id="roomName" class="box-title">Upload Images First !</h2> 
           <i onclick="nameEditClick()" style="cursor:pointer" class="fa fa-fw fa-edit"></i>
-
           <label class="checkbox-inline"><input id="firstRoomCheckBox" type="checkbox" onclick='setFirstRoomClick(this)'; value="">Set as first room</label>
         </div>
 
         <!-- /.box-header -->
         <div class="box-body">
-          <!-- <img  id="VRview" src="./images/frontdoor.JPG" alt="Mountain View" style="max-width:100%;max-height:100%;"> -->
+
           <div id="vrElement" onmousemove="vrViewerMouseMove(event)" onmousedown="vrViewerMouseDown(event)" onmouseup="vrViewerMouseUp(event)" onmouseleave="vrViewerMouseUp(event)" style="width=200px; height:500px;"></div>
         </div>
         <!-- /.box-body -->
       </div>
-<div class="box box-default color-palette-box">
+      <div class="box box-default color-palette-box">
         <!-- /.box-header -->
         <div class="box-body">
           <div style="height:0px;overflow:hidden">
@@ -79,39 +78,10 @@ include_once($projectRoot."/template/header.php");
 
     <div class="col-md-4">
       <div class="box box-default color-palette-box">
+
         <!-- /.box-header -->
         <div class="box-body">
           <div class="pre-scrollable" id='imageList' style="max-height:600px;">
-
-<!--         <div class="imgThumb">
-          <div class="col-md-9" >
-            <img src="./images/hallway.JPG" alt="..." style="max-width:200px">
-            <center>Living Room</center>
-          </div>
-        </div>
-
-                <div class="imgThumb">
-          <div class="col-md-9" >
-            <img src="./images/hallway.JPG" alt="..." style="max-width:200px">
-            <center>Living Room</center>
-          </div>
-        </div> -->
-<!--           <div class="col-sm-4 col-md-2"  style="margin-top:10px; margin-right:20px; margin-left:20px" >
-            <img src="./images/hallway.JPG" alt="..." style="max-width:200px">
-            <center>Living Room</center>
-          </div>
-          <div class="col-sm-4 col-md-2" style="margin-top:10px; margin-right:20px; margin-left:20px">
-            <img src="./images/hallway.JPG" alt="..." style="max-width:200px">
-            <center>Living Room</center>
-          </div>
-          <div class="col-sm-4 col-md-2" style="margin-top:10px; margin-right:20px; margin-left:20px">
-            <img src="./images/hallway.JPG" alt="..." style="max-width:200px">
-            <center>Living Room</center>
-          </div> -->
-<!--           <div class="col-sm-4 col-md-2" style="margin-top:10px; margin-right:20px; margin-left:20px">
-            <img src="./images/hallway.JPG" alt="..." style="max-width:200px">
-            <center>Living Room</center>
-          </div> -->
 
             <!-- /.box-body -->
           </div>

@@ -14,13 +14,11 @@ var clickOnLink = false;
 var clock = new THREE.Clock();
 
 init();
-// setScene("./images/kitchen.JPG");
 animate();
 
-function init() {
+console.log(localStorage.getItem("description"));
 
-  // window.onkeyup = keyDownEvent;
-  // window.onmousemove = mouseMoveEvent;
+function init() {
 
   renderer = new THREE.WebGLRenderer();
 
@@ -133,36 +131,12 @@ function render(dt) {
 
 function animate(t) {
   requestAnimationFrame(animate);
-
-    //       raycaster.setFromCamera( mouse, camera ); 
-
-    //  // calculate objects intersecting the picking ray
-    // var intersects = raycaster.intersectObjects( scene.children );
-    // console.log(intersects.length);
-
-    // for ( var i = 0; i < intersects.length; i++ ) {
-    //   console.log(i);
-    //   if(intersects[ i ].object == sphere)
-    //     console.log("hit");
-
-    // }
-
   update(clock.getDelta());
   render(clock.getDelta());
 }
 
-// $(".imgThumb").live("click", function(e){
-//     // console.log(e.target.id);
-//     selectedRoom = getRoom(e.target.id);
-//     // console.log(selectedRoom);
-//     clearScene();
-//     setScene(selectedRoom);
-// });
-
 $('body').on('click', '.imgThumb', function(e){
-    // console.log(e.target.id);
     selectedRoom = getRoom(e.target.id);
-    // console.log(selectedRoom);
     clearScene();
     setScene(selectedRoom);
 });
@@ -174,7 +148,8 @@ function updateLinkDropDownMenu()
     $("#linkDropDownMenu").empty();
 
     for (var i = 0; i < rooms.length; i++){
-      $("#linkDropDownMenu").append('<li><a id="r' + rooms[i].id + '" class="linkMenuItem">'+ rooms[i].name +'</a></li>');
+      if(rooms[i] != currentRoom)
+        $("#linkDropDownMenu").append('<li><a id="r' + rooms[i].id + '" class="linkMenuItem">'+ rooms[i].name +'</a></li>');
     }
   }
 }
@@ -200,7 +175,6 @@ $('body').on('click', '.linkMenuItem', function(e){
 
   var cameraLookatVec = getCameraLookAtVec();
   cameraLookatVec.multiplyScalar(90);
-  // console.log(cameraLookatVec);
 
   var sphericalPosition = cartesianToSpherical(cameraLookatVec);
   
@@ -223,19 +197,31 @@ function nameEditClick()
 
 function doneClick(){
 
+  var data = {};
   var roomsArr = [];
 
   for(var i = 0; i < rooms.length; i++)
   {
     roomsArr.push(rooms[i].getDict());
   }
-  // localStorage.setItem("rooms", roomsArr);
 
-    // $('<form action="submitNewListing2.php" method="POST">' + 
-    // '<input type="hidden" name="aid" value="' + roomsArr + '">' +
-    // '</form>').submit();
+  data['rooms'] = roomsArr;
+  data['address'] = localStorage.getItem("address");
+  data['city'] = localStorage.getItem("city");
+  data['price'] = localStorage.getItem("price");
+  data['description'] = localStorage.getItem("description");
+  data['email'] = localStorage.getItem("email");
+  data['url'] = localStorage.getItem("url");
+  data['name'] = localStorage.getItem("name");
+  data['phone'] = localStorage.getItem("phone");
+  data['private'] = localStorage.getItem("private");
+  data['coverPhoto'] = localStorage.getItem("coverPhoto");
 
-$.post( "submitNewListing2.php", {rooms: roomsArr}) ;
+  // console.log(data['coverPhoto']);
+
+  //get the other listing info from locastorage
+
+$.post( "submitNewListing2.php", data) ;
 
 }
 
@@ -271,6 +257,7 @@ function removeLinkClick()
 }
 
 var roomCounter = 1;
+var firstImageUploaded = false;
 function uploadedNewRoom(e)
 {
   var r = new Room(roomCounter, "Room " + roomCounter , e.target.result );
@@ -280,6 +267,11 @@ function uploadedNewRoom(e)
     <img class="imgThumb" id="'+ r.id + '" src="'+ r.image + '"alt="..." style="max-width:100%; cursor:pointer"> \
     <div style="text-align:center" id="n'+ roomCounter +'"> '+ r.name +' </div> </p> \
     </div>');
+
+  if(firstImageUploaded == false){
+    firstImageUploaded = true;
+    setScene(r);
+  }
 
   roomCounter++;
 }
@@ -408,8 +400,6 @@ function vrViewerMouseDown(event){
 
 function vrViewerMouseUp(event){
   clickOnLink = false;
-  // console.log(controls.norotate);
-  // controls.noRotate = false;
 }
 
 function vrViewerMouseMove(event){
@@ -436,3 +426,4 @@ function vrViewerMouseMove(event){
     selectedLink.linkSprite.position.set(cartesianPosition.x,cartesianPosition.y,cartesianPosition.z);
   }
 }
+
