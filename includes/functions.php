@@ -8,6 +8,7 @@ require_once $projectRoot.'/includes/awsSDK/aws-autoloader.php';
 
 use Aws\DynamoDb\DynamoDbClient;
 use Aws\S3\S3Client;
+use Aws\Ses\SesClient;
 use Aws\DynamoDb\Exception\DynamoDbException;
 use Aws\DynamoDb\Marshaler;
 
@@ -25,8 +26,8 @@ function getDBConnection()
     'secret' => 'O+SBFW0nkY1Z9sYez53x4uRo4d9ZAZcN9Ze2TA1M'
     ],
     'http'    => [
-        'verify' => $projectRoot .'includes/awsSDK/ca-bundle.crt'
-        #'verify' => 'C:\wamp\www\ca-bundle.crt'
+        #'verify' => $projectRoot .'includes/awsSDK/ca-bundle.crt'
+        'verify' => 'C:\wamp\www\ca-bundle.crt'
     ]
     ]);
 
@@ -48,14 +49,54 @@ function getS3Connection()
     'secret' => 'O+SBFW0nkY1Z9sYez53x4uRo4d9ZAZcN9Ze2TA1M'
     ],
     'http'    => [
-        'verify' => $projectRoot .'includes/awsSDK/ca-bundle.crt'
-        #'verify' => 'C:\wamp\www\ca-bundle.crt'
+        #'verify' => $projectRoot .'includes/awsSDK/ca-bundle.crt'
+        'verify' => 'C:\wamp\www\ca-bundle.crt'
     ]
 ]);
 
 	return $sdk;
 
 }
+
+
+function getSesConnection()
+{
+    $client = SesClient::factory(array(
+    'region'   => 'us-west-2',
+    'version'  => 'latest',
+    'credentials' => [
+    'key'    => 'AKIAICEANPUXOOHUW7GQ',
+    'secret' => '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'
+    ],
+    ));
+
+    return $client;
+
+}
+
+function getSesConnection_()
+{
+    date_default_timezone_set('UTC');
+    global $projectRoot;
+
+    $sdk = new Aws\Sdk([
+    'endpoint'   => 'https://s3-us-west-2.amazonaws.com',
+    'region'   => 'us-west-2',
+    'version'  => 'latest',
+    'credentials' => [
+    'key'    => 'AKIAICEANPUXOOHUW7GQ',
+    'secret' => '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'
+    ],
+    'http'    => [
+        #'verify' => $projectRoot .'includes/awsSDK/ca-bundle.crt'
+        'verify' => 'C:\wamp\www\ca-bundle.crt'
+    ]
+]);
+
+    return $sdk;
+
+}
+
 
 function addToListingDB($item)
 {
@@ -106,6 +147,26 @@ function addToRequestDB($item)
 
     $params = [
         'TableName' => 'Request',
+        'Item' => $item
+    ];
+
+    try {
+        $result = $dynamodb->putItem($params);
+
+    } catch (DynamoDbException $e) {
+        echo "Unable to add item:\n";
+        echo $e->getMessage() . "\n";
+    }
+}
+
+function addToUserDB($item)
+{
+    $sdkConn = getDBConnection();
+    $dynamodb = $sdkConn->createDynamoDb();
+    $marshaler = new Marshaler();
+
+    $params = [
+        'TableName' => 'User',
         'Item' => $item
     ];
 
@@ -184,6 +245,26 @@ function getAllRequestsSorted($index)
         'TableName'     => 'Request',
         'IndexName'     => $index
         ));
+
+    $returnArr = iterator_to_array($iterator);
+
+    return $returnArr;
+}
+
+function getUser($email)
+{
+    $sdkConn = getDBConnection();
+    $dynamodb = $sdkConn->createDynamoDb();
+
+    $iterator = $dynamodb->query(array( 
+        'TableName'     => 'User',
+        'IndexName'     => 'Email-index',
+        'KeyConditionExpression' => 'Email = :v_id',
+        'ExpressionAttributeValues' =>  [
+        ':v_id' => [
+            'S' => $email]
+        ],
+    ));
 
     $returnArr = iterator_to_array($iterator);
 
@@ -364,6 +445,74 @@ function createUUID()
 	$UUID = uniqid($hostname);
 
 	return md5($UUID);
+}
+
+function random_password( $length = 8 ) {
+    $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_-=+;:,.?";
+    $password = substr( str_shuffle( $chars ), 0, $length );
+    return $password;
+}
+
+function generate_user($email, $name, $phone) {
+
+    $user = getUser($email);
+    if (count($user["Items"]) == 0)
+    {
+        $password = random_password();
+
+        $client = getSesConnection();
+        $msg = array();
+        $msg['Source'] = "izerlabs@gmail.com";
+        //ToAddresses must be an array
+        $msg['Destination']['ToAddresses'][] = $email;
+
+        $msg['Message']['Subject']['Data'] = "Vizer Account Credentials";
+        $msg['Message']['Subject']['Charset'] = "UTF-8";
+
+        $msg['Message']['Body']['Text']['Data'] ="Hello, thank you for choosing Vizer. Your listing request is now complete and live, to make it easier for you to submit listing requests in the future and to allow you to view your existing listings we have created an account you can use to login to our homepage at: *website url*
+
+The Login Credentials for your Vizer account are as follows:
+Email: ".$email."
+Password: ".$password."
+
+We hope to work with you again.
+
+-Izer Labs";
+        $msg['Message']['Body']['Text']['Charset'] = "UTF-8";
+
+        try{
+            $result = $client->sendEmail($msg);
+
+            //save the MessageId which can be used to track the request
+            $msg_id = $result->get('MessageId');
+            echo("MessageId: $msg_id");
+
+            //view sample output
+            print_r($result);
+        } catch (Exception $e) {
+            //An error happened and the email did not get sent
+            echo '   error   ';
+            echo($e->getMessage());
+        }
+
+        $id = createUUID();
+        $hashpassword = hash("sha256", $password, false);
+
+        $item = array(
+        "UserID" => array('S' => $id),
+        "Email" => array('S' => $email),
+        "ContactPhone" => array('S' => $phone),
+        "Name" => array('S' => $name),
+        "Password" => array('S' => $hashpassword),
+        );
+
+        addToUserDB($item);
+
+        return $id;
+    }
+    else{
+        return $user["Items"][0]["UserID"]["S"];
+    }
 }
 
 ?>
