@@ -36,7 +36,7 @@ if(isset($_SESSION['searchRequests'])) {
 
 <div class="row">
     <!-- Your Page Content Here -->
-    <div class="col-md-10">
+    <div class="col-md-12">
     <div class="box">
             <div class="box-header with-border">
               <form action="./searchRequest.php" method="post">
@@ -118,7 +118,7 @@ if(isset($_SESSION['searchRequests'])) {
 
             </div>
             <!-- /.box-body -->
-            <div class="box-footer clearfix">
+<!--             <div class="box-footer clearfix">
               <ul class="pagination pagination-sm no-margin pull-right">
                 <li><a href="#">«</a></li>
                 <li><a href="#">1</a></li>
@@ -126,7 +126,7 @@ if(isset($_SESSION['searchRequests'])) {
                 <li><a href="#">3</a></li>
                 <li><a href="#">»</a></li>
               </ul>
-            </div>
+            </div> -->
           </div>
         </div>
       </div>

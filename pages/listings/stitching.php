@@ -37,6 +37,23 @@ include_once($projectRoot."/template/header.php");
     <!-- Your Page Content Here -->
   <section class="content">
 
+    <!-- Uploading dialogue box -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title" id="myModalLabel">Uploading. Please wait.</h4>
+          </div>
+          <div class="modal-body">
+            <div class="progress">
+              <div class="progress-bar progress-bar-striped active" role="progressbar"
+                aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:100%"></div>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
 
     <div class="row">
       <div class="col-md-8">

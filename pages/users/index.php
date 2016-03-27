@@ -60,9 +60,9 @@ $allUsers = getAllUsers();
 
             </div>
             <!-- /.box-body -->
-            <div class="box-footer clearfix">
+<!--             <div class="box-footer clearfix">
               <a type="button" href="./newAdmin.php" class="btn btn-success">Add User</a>
-            </div>
+            </div> -->
           </div>
         </div>
       </div>

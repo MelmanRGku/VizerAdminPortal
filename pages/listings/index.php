@@ -67,7 +67,7 @@ if(isset($_SESSION['searchListings'])) {
                     echo "<td>".$listing["Address"]["S"]."</td>";
                     echo "<td>".$listing["City"]["S"]."</td>";
                     echo "<td>".$listing["UserEmail"]["S"]."</td>";
-                    echo '<td><button type="button" class="btn btn-block btn-warning">Edit</button></td>';
+                    echo '<td><a type="button"type="button" href="./editListing.php" class="btn btn-block btn-warning">Edit</a></td>';
                     echo "</tr>";
                   }
                   unset($_SESSION['searchListings']);
@@ -80,7 +80,7 @@ if(isset($_SESSION['searchListings'])) {
                     echo "<td>".$listing["Address"]["S"]."</td>";
                     echo "<td>".$listing["City"]["S"]."</td>";
                     echo "<td>".$listing["UserEmail"]["S"]."</td>";
-                    echo '<td><button type="button" class="btn btn-block btn-warning">Edit</button></td>';
+                    echo '<td><a type="button"type="button" href="./editListing.php" class="btn btn-block btn-warning">Edit</a></td>';
                     echo "</tr>";
                   }
                 }
@@ -91,7 +91,7 @@ if(isset($_SESSION['searchListings'])) {
 
             </div>
             <!-- /.box-body -->
-            <div class="box-footer clearfix">
+<!--             <div class="box-footer clearfix">
               <ul class="pagination pagination-sm no-margin pull-right">
                 <li><a href="#">«</a></li>
                 <li><a href="#">1</a></li>
@@ -99,7 +99,7 @@ if(isset($_SESSION['searchListings'])) {
                 <li><a href="#">3</a></li>
                 <li><a href="#">»</a></li>
               </ul>
-            </div>
+            </div> -->
           </div>
         </div>
       </div>

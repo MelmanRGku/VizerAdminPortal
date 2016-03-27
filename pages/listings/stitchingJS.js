@@ -21,8 +21,6 @@ var clickOnLink = false;
 init();
 animate();
 
-console.log(localStorage.getItem("description"));
-
 function init() {
 
   renderer = new THREE.WebGLRenderer();
@@ -259,13 +257,13 @@ function doneClick(){
   data['private'] = localStorage.getItem("private");
   data['coverPhoto'] = localStorage.getItem("coverPhoto");
 
-  // $('#myModal').modal('show');
-  waitingDialog.show();
+  $("#myModal").modal();
 
-  // $.post( "submitNewListing.php", data)
-  // .done(function( retData ) {
-  //   alert( "Data Loaded: " + retData );
-  // }); 
+  $.post( "submitNewListing.php", data)
+  .done(function( retData ) {
+    // alert( "Data Loaded: " + retData );
+    window.location.replace("./");
+  }); 
 
 }
 
