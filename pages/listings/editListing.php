@@ -9,6 +9,8 @@ $projectRoot = "../../";
 include_once($projectRoot."/template/header.php");
 include_once($projectRoot."/includes/functions.php");
 
+$listing = getListing($_GET["id"]);
+
 ?>
 
 <!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script> -->
@@ -38,26 +40,28 @@ include_once($projectRoot."/includes/functions.php");
     <div class="box">
 
             <!-- /.box-header -->
-            <form role="form" id="newListingForm" method="post" action="./submitNewListing2.php">
+            <form role="form" id="newListingForm" method="post" action="./submitEditListing.php">
               <div class="box-body">
 
               <div id="imageHolder">
                 <img class="img-responsive pad" width="400"  id="imgPreview"></img>
               </div>
 
+              <input type="hidden" class="form-control" name="idField" value='<?php print_r($listing["Item"]["ListingID"]["S"]) ?>' required>
+
                 <div class="form-group">
                   <label>Main Image</label>
-                  <input type="file" name="imgUpload" id="imgUpload" accept="image/*" required>
+                  <input type="file" name="imgUpload" id="imgUpload" accept="image/*">
                 </div>
 
                 <div class="form-group">
                   <label>Address</label>
-                  <input type="text" class="form-control" name="addressField" id="addressField" required>
+                  <input type="text" class="form-control" name="addressField" id="addressField" value='<?php print_r($listing["Item"]["Address"]["S"]) ?>' required>
                 </div>
 
                 <div class="form-group">
                   <label>City</label>                  
-                  <select class="form-control" name="cityField" id="cityField" required>
+                  <select class="form-control" name="cityField" id="cityField" value='<?php print_r($listing["Item"]["City"]["S"]) ?>' required>
                     <option value="Calgary" selected>Calgary</option>
                     <option>Edmoton</option>
                   </select>
@@ -65,36 +69,26 @@ include_once($projectRoot."/includes/functions.php");
 
                 <div class="form-group">
                   <label>Price</label>
-                  <input type="number" class="form-control" name="priceField" id="priceField" required>
+                  <input type="number" class="form-control" name="priceField" id="priceField" value='<?php print_r($listing["Item"]["Price"]["N"]) ?>' required>
                 </div>
 
                 <div class="form-group">
                   <label>Description</label>
-                  <textarea class="form-control" name = "descriptionField" id="descriptionField" required></textarea>
+                  <textarea class="form-control" name = "descriptionField" id="descriptionField" required><?php print_r($listing["Item"]["Description"]["S"]) ?></textarea>
                 </div>
 
                 <div class="form-group">
                   <label>User Email</label>
-                  <input type="email" class="form-control" name="emailField" id="emailField" required>
-                </div>
-
-                <div class="form-group">
-                  <label>User Name</label>
-                  <input type="test" class="form-control" name="nameField" id="nameField">
-                </div>
-
-                <div class="form-group">
-                  <label>User Phone Number</label>
-                  <input type="test" class="form-control" name="phoneField" id="phoneField">
+                  <input type="email" class="form-control" name="emailField" id="emailField" value='<?php print_r($listing["Item"]["UserEmail"]["S"]) ?>' required>
                 </div>
 
                 <div class="form-group">
                   <label>URL</label>
-                  <input type="text" class="form-control" name="urlField" id="urlField" required>
+                  <input type="text" class="form-control" name="urlField" id="urlField" value='<?php print_r($listing["Item"]["URL"]["S"]) ?>' required>
                 </div>
 
                 <div class="form-group">
-                  <input type="checkbox" value="private" name="privateField" id="privateField">
+                  <input type="checkbox" value="private" name="privateField" id="privateField" <?php if($listing["Item"]["Private"]["BOOL"]) : ?> checked="checked" <?php endif; ?>>
                   <label>Private?</label>
                 </div>
 

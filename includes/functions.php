@@ -27,7 +27,7 @@ function getDBConnection()
     ],
     'http'    => [
         'verify' => $projectRoot .'includes/awsSDK/ca-bundle.crt'
-        // 'verify' => 'C:\wamp\www\ca-bundle.crt'
+        //'verify' => 'C:\wamp\www\ca-bundle.crt'
     ]
     ]);
 
@@ -50,7 +50,7 @@ function getS3Connection()
     ],
     'http'    => [
         'verify' => $projectRoot .'includes/awsSDK/ca-bundle.crt'
-        // 'verify' => 'C:\wamp\www\ca-bundle.crt'
+        //'verify' => 'C:\wamp\www\ca-bundle.crt'
     ]
 ]);
 
@@ -71,29 +71,6 @@ function getSesConnection()
     ));
 
     return $client;
-
-}
-
-function getSesConnection_()
-{
-    date_default_timezone_set('UTC');
-    global $projectRoot;
-
-    $sdk = new Aws\Sdk([
-    'endpoint'   => 'https://s3-us-west-2.amazonaws.com',
-    'region'   => 'us-west-2',
-    'version'  => 'latest',
-    'credentials' => [
-    'key'    => 'AKIAICEANPUXOOHUW7GQ',
-    'secret' => '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'
-    ],
-    'http'    => [
-        'verify' => $projectRoot .'includes/awsSDK/ca-bundle.crt'
-        // 'verify' => 'C:\wamp\www\ca-bundle.crt'
-    ]
-]);
-
-    return $sdk;
 
 }
 
@@ -312,6 +289,22 @@ function getAllRequestsSorted($index)
     $returnArr = iterator_to_array($iterator);
 
     return $returnArr;
+}
+
+function getListing($id)
+{
+    $sdkConn = getDBConnection();
+    $dynamodb = $sdkConn->createDynamoDb();
+
+    $item = $dynamodb->getItem(array( 
+        'TableName'     => 'Listing',
+        'ConsistentRead' => true,
+        'Key' => [
+            'ListingID' => array('S' => $id),
+        ],
+    ));
+
+    return $item;
 }
 
 function getUser($email)
