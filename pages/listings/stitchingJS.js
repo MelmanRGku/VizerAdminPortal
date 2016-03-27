@@ -237,6 +237,62 @@ function nameEditClick()
 
 function doneClick(){
 
+  uploadImagesToS3(rooms);
+
+  // var data = {};
+  // var roomsArr = [];
+
+  // for(var i = 0; i < rooms.length; i++)
+  // {
+  //   roomsArr.push(rooms[i].getDict());
+  // }
+
+  // data['rooms'] = roomsArr;
+  // data['address'] = localStorage.getItem("address");
+  // data['city'] = localStorage.getItem("city");
+  // data['price'] = localStorage.getItem("price");
+  // data['description'] = localStorage.getItem("description");
+  // data['email'] = localStorage.getItem("email");
+  // data['url'] = localStorage.getItem("url");
+  // data['name'] = localStorage.getItem("name");
+  // data['phone'] = localStorage.getItem("phone");
+  // data['private'] = localStorage.getItem("private");
+  // data['coverPhoto'] = localStorage.getItem("coverPhoto");
+
+  // // $("#myModal").modal();
+
+  // $.post( "submitNewListing.php", data)
+  // .done(function( retData ) {
+  //   alert( "Data Loaded: " + retData );
+  //   console.log( "Data Loaded: " + retData );
+  //   // window.location.replace("./");
+  // }); 
+
+}
+
+function uploadImagesToS3()
+{
+   for(var i = 0; i < rooms.length; i++)
+  {
+    $.post( "uploadImageToS3.php", {id: rooms[i].id, image: rooms[i].image})
+      .done(function( retData ) {
+        // alert( "Data Loaded: " + retData.id );
+        console.log( "Data Loaded: " + retData.id + " " + retData.UUID );
+
+        var room = getRoom(retData.id );
+        room.imageUUID = retData.UUID;
+
+        if(allImagesUploaded() == true)
+        {
+          uploadDatatoServer();
+        }
+
+      }, "json"); 
+    }
+}
+
+function uploadDatatoServer()
+{
   var data = {};
   var roomsArr = [];
 
@@ -257,14 +313,27 @@ function doneClick(){
   data['private'] = localStorage.getItem("private");
   data['coverPhoto'] = localStorage.getItem("coverPhoto");
 
-  $("#myModal").modal();
+  // $("#myModal").modal();
 
   $.post( "submitNewListing.php", data)
   .done(function( retData ) {
-    // alert( "Data Loaded: " + retData );
-    window.location.replace("./");
+    alert( "Data Loaded: " + retData );
+    console.log( "Data Loaded: " + retData );
+    // window.location.replace("./");
   }); 
 
+}
+
+function allImagesUploaded()
+{
+  for(var i = 0; i < rooms.length; i++)
+  {
+    if(rooms[i].imageUUID == null){ 
+      return false;
+    }
+  }
+
+  return true;
 }
 
 function getRoom(id)

@@ -1,15 +1,15 @@
 <?php
 
 session_start();
-if (!isset($_SESSION['state'])) {
-  header('Location: ../login/');
-}
 
 $projectRoot = "../../";
 include_once($projectRoot."/includes/functions.php");
 
+echo $_POST["email"];
+
 $rooms = $_POST["rooms"];
 
+/*
 //getting userID
 $userID = generate_user($_POST["email"], $_POST["name"], $_POST["phone"]);
 
@@ -107,7 +107,7 @@ foreach( $rooms as $room){
 fclose($myfile);
 
 
-
+*/
 function getCorrespondingRoomUUID($rooms, $id){
 
 	foreach($rooms as $room){

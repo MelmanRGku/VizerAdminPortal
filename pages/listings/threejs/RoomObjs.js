@@ -7,6 +7,7 @@ class Room{
 		this.id = id;
 		this.name = name;
 		this.image = image;
+		this.imageUUID = null;
 		this.firstRoom = false;
 		this.links = new Array();
 		this.bubbles = new Array();
@@ -17,7 +18,6 @@ class Room{
 		var dict = {};
 		dict["id"] = this.id;
 		dict["name"] = this.name;
-		dict["image"] = this.image;
 		dict["firstRoom"] = this.firstRoom;
 
 		var linksArr = [];
