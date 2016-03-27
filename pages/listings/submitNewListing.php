@@ -2,87 +2,165 @@
 
 session_start();
 if (!isset($_SESSION['state'])) {
-  header('Location: ../../login/');
+  header('Location: ../login/');
 }
-
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
 
 $projectRoot = "../../";
 include_once($projectRoot."/includes/functions.php");
 
+$rooms = $_POST["rooms"];
 
-$target_dir = "./temp_uploads/";
-$target_file = $target_dir . basename($_FILES["imgUpload"]["name"]);
-$uploadOk = 1;
-$imageFileType = pathinfo($target_file,PATHINFO_EXTENSION);
+//getting userID
+$userID = generate_user($_POST["email"], $_POST["name"], $_POST["phone"]);
 
-// Check if image file is a actual image or fake image
-if(isset($_POST["submit"])) {
-    $check = getimagesize($_FILES["imgUpload"]["tmp_name"]);
-    if($check !== false) {
-        echo "File is an image - " . $check["mime"] . ".";
-        $uploadOk = 1;
-    } else {
-        echo "File is not an image.";
-        $uploadOk = 0;
-    }
+//generate listing uuid
+$listingID = createUUID();
+
+$firstRoomUUID = null;
+
+// generate UUID for each room and push to DB
+for($i = 0; $i < count($rooms); $i++){
+	$rooms[$i]["UUID"] = createUUID();
+	$rooms[$i]["imgUUID"] = createUUID();
+	$rooms[$i]["listingUUID"] = $listingID;
+
+	if($rooms[$i]["firstRoom"] == true){
+		$firstRoomUUID = $rooms[$i]["UUID"];
+	}
+
+	//upload image to S3
+	uploadImageToS3($rooms[$i]["image"], $rooms[$i]["imgUUID"]);
+
+	insertRoomToDB($rooms[$i]);
+
 }
 
-// Allow certain file formats
-if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
-&& $imageFileType != "gif" ) {
-    echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
-    $uploadOk = 0;
+if($firstRoomUUID == null) { 
+	$firstRoomUUID = $rooms[0]["UUID"]; 
+	$rooms[0]["firstRoom"] = true;
 }
 
-$imgID = createUUID();
+for($i = 0; $i < count($rooms); $i++){
 
-// Check if $uploadOk is set to 0 by an error
-if ($uploadOk == 0) {
-    echo "Sorry, your file was not uploaded.";
-// if everything is ok, try to upload file
-} else {
-  // echo $_FILES["imgUpload"]["tmp_name"];
-    if (move_uploaded_file($_FILES["imgUpload"]["tmp_name"], $target_file)) {
-        // echo "The file ". basename( $_FILES["imgUpload"]["name"]). " has been uploaded.";
-        uploadImage($target_file, $imgID);
+	//assign toUUID for each link and push to DB
+	for($j = 0; $j < count($rooms[$i]["links"]); $j++){
+		$rooms[$i]["links"][$j]["fromUUID"] = $rooms[$i]["UUID"];
+		$toID = $rooms[$i]["links"][$j]["toId"];
+		$toUUID = getCorrespondingRoomUUID($rooms, $toID);
+		$rooms[$i]["links"][$j]["toUUID"] = $toUUID;
+		$rooms[$i]["links"][$j]["listingUUID"] = $listingID;
 
-    } else {
-        echo "Sorry, there was an error uploading your file.";
-        exit();
-    }
+		insertLinkToDB($rooms[$i]["links"][$j]);
+	}
+
+	for($j = 0; $j < count($rooms[$i]["bubbles"]); $j++){
+		$rooms[$i]["bubbles"][$j]["UUID"] = createUUID();
+		$rooms[$i]["bubbles"][$j]["listingUUID"] = $listingID;
+		$rooms[$i]["bubbles"][$j]["roomUUID"] = $rooms[$i]["UUID"];
+
+		insertBubbleToDB($rooms[$i]["bubbles"][$j]);
+	}
+
+
 }
 
-$address = $_POST["addressField"];
-$city = $_POST["cityField"];
-$price = $_POST["priceField"];
-$description = $_POST["descriptionField"];
-$userEmail = $_POST["emailField"];
-$url = $_POST["urlField"];
-$private = false;
-if( isset($_POST["privateField"])) { $private = true; }
-$UUID = createUUID();
+//push listing to DB
+$coverPhotoID = createUUID();
+uploadImageToS3($_POST["coverPhoto"], $coverPhotoID);
+
+$privateBool = false;
+if($_POST['private'] == "true"){ $privateBool = true;}
 
 $item = array(
-  "ListingID" => array('S' => $UUID),
-  "HousePhotoID" => array('S' => $imgID),
-  "Address" => array('S' => $address),
-  "City" => array('S' => $city),
-  "Price" => array('N' => $price),
-  "Description" => array('S' => $description),
-  "UserEmail" => array('S' => $userEmail),
-  "URL" => array('S' => $url),
-  "Private" => array('BOOL' => $private),
+  "ListingID" => array('S' => $listingID),
+  "HousePhotoID" => array('S' => $coverPhotoID),
+  "Address" => array('S' => $_POST["address"]),
+  "City" => array('S' => $_POST["city"]),
+  "Price" => array('N' => $_POST["price"]),
+  "Description" => array('S' => $_POST["description"]),
+  "UserEmail" => array('S' => $_POST["email"]),
+  "URL" => array('S' => $_POST["url"]),
+  "Private" => array('BOOL' => $privateBool),
   "NumTours" => array('N' => '0'),
   "TotalTourTime" => array('N' => '0'),
-  "StartingRoomID" => array('S' => 'x'),
-  "UserID" => array('S' => 'x'),
+  "StartingRoomID" => array('S' => $firstRoomUUID),
+  "UserID" => array('S' => $userID),
   );
 
 addToListingDB($item);
 
-header('Location: ./');
+
+//debugging
+$myfile = fopen("submitRec.txt", "w") or die("Unable to open file!");
+foreach( $rooms as $room){
+  fwrite($myfile, $room["name"] . PHP_EOL);
+  fwrite($myfile, $room["id"] . PHP_EOL);
+  fwrite($myfile, $room["UUID"] . PHP_EOL);
+  fwrite($myfile, $room["firstRoom"] . PHP_EOL); 
+  fwrite($myfile, $firstRoomUUID . PHP_EOL);  
+
+  foreach( $room["links"] as $link){
+  	fwrite($myfile, $link["toUUID"] . PHP_EOL);
+  }
+  fwrite($myfile, PHP_EOL);
+}
+fclose($myfile);
+
+
+
+function getCorrespondingRoomUUID($rooms, $id){
+
+	foreach($rooms as $room){
+		if($room["id"] == $id){
+			return $room["UUID"];
+		}
+	}
+
+	return "None";
+}
+
+function insertRoomToDB($room){
+	$item = array(
+		"RoomID" => array('S' => $room["UUID"]),
+  		"ListingID" => array('S' => $room["listingUUID"]),
+  		"Name" => array('S' => $room["name"]),
+  		"ImageID" => array('S' => $room["imgUUID"]),
+  		);
+
+	addToRoomDB($item);
+}
+
+function insertLinkToDB($link){
+	$item = array(
+		"RoomID1" => array('S' => $link["fromUUID"]),
+  		"RoomID2" => array('S' => $link["toUUID"]),
+  		"ListingID" => array('S' => $link["listingUUID"]),
+  		"Theta" => array('N' => $link["theta"]),
+  		"Phi" => array('N' => $link["phi"]),
+  		);
+
+	addToLinkDB($item);
+}
+
+function insertBubbleToDB($bubble){
+	$item = array(
+		"BubbleID" => array('S' => $bubble["UUID"]),
+  		"RoomID" => array('S' => $bubble["roomUUID"]),
+  		"ListingID" => array('S' => $bubble["listingUUID"]),
+  		"Text" => array('S' => $bubble["text"]),
+  		"Theta" => array('N' => $bubble["theta"]),
+  		"Phi" => array('N' => $bubble["phi"]),
+  		);
+
+	addToBubbleDB($item);
+}
+
+function uploadImageToS3($image, $UUID)
+{
+	$imageCont = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $image ));
+	$tempAddress = './temp_uploads/'. $UUID;
+	file_put_contents($tempAddress, $imageCont);
+	uploadImage($tempAddress, $UUID);
+}
 
 ?>

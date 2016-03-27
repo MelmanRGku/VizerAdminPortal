@@ -26,8 +26,8 @@ function getDBConnection()
     'secret' => 'O+SBFW0nkY1Z9sYez53x4uRo4d9ZAZcN9Ze2TA1M'
     ],
     'http'    => [
-        #'verify' => $projectRoot .'includes/awsSDK/ca-bundle.crt'
-        'verify' => 'C:\wamp\www\ca-bundle.crt'
+        'verify' => $projectRoot .'includes/awsSDK/ca-bundle.crt'
+        // 'verify' => 'C:\wamp\www\ca-bundle.crt'
     ]
     ]);
 
@@ -49,8 +49,8 @@ function getS3Connection()
     'secret' => 'O+SBFW0nkY1Z9sYez53x4uRo4d9ZAZcN9Ze2TA1M'
     ],
     'http'    => [
-        #'verify' => $projectRoot .'includes/awsSDK/ca-bundle.crt'
-        'verify' => 'C:\wamp\www\ca-bundle.crt'
+        'verify' => $projectRoot .'includes/awsSDK/ca-bundle.crt'
+        // 'verify' => 'C:\wamp\www\ca-bundle.crt'
     ]
 ]);
 
@@ -88,8 +88,8 @@ function getSesConnection_()
     'secret' => 'O+SBFW0nkY1Z9sYez53x4uRo4d9ZAZcN9Ze2TA1M'
     ],
     'http'    => [
-        #'verify' => $projectRoot .'includes/awsSDK/ca-bundle.crt'
-        'verify' => 'C:\wamp\www\ca-bundle.crt'
+        'verify' => $projectRoot .'includes/awsSDK/ca-bundle.crt'
+        // 'verify' => 'C:\wamp\www\ca-bundle.crt'
     ]
 ]);
 
@@ -117,6 +117,27 @@ function addToListingDB($item)
     	echo "Unable to add item:\n";
     	echo $e->getMessage() . "\n";
 	}
+}
+
+function addToBubbleDB($item)
+{
+    $sdkConn = getDBConnection();
+    $dynamodb = $sdkConn->createDynamoDb();
+    $marshaler = new Marshaler();
+
+    $params = [
+        'TableName' => 'FeatureBubble',
+        'Item' => $item
+    ];
+
+    try {
+        $result = $dynamodb->putItem($params);
+        // echo "Added item: $Address\n";
+
+    } catch (DynamoDbException $e) {
+        echo "Unable to add item:\n";
+        echo $e->getMessage() . "\n";
+    }
 }
 
 function addToRoomDB($item)

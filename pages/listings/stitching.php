@@ -32,9 +32,12 @@ include_once($projectRoot."/template/header.php");
     </ol>
   </section>
 
+
   <!-- Main content -->
     <!-- Your Page Content Here -->
   <section class="content">
+
+
     <div class="row">
       <div class="col-md-8">
 
@@ -66,9 +69,8 @@ include_once($projectRoot."/template/header.php");
             <ul id="linkDropDownMenu" class="dropdown-menu" >
             </ul>
           </div>
-          <button type="button" class="btn btn-primary" onclick="removeLinkClick()">Remove Link</button>
-          <button type="button" class="btn btn-primary">Add Bubble</button>
-          <button type="button" class="btn btn-primary">Remove Bubble</button>
+          <button type="button" class="btn btn-primary" onclick="addBubbleClick()">Add Bubble</button>
+          <button type="button" class="btn btn-primary" onclick="removeItemClick()">Remove Item</button>
           <button type="button" class="btn btn-success" onclick="doneClick()">Done</button>
         </div>
         <!-- /.box-body -->
