@@ -26,9 +26,6 @@ for($i = 0; $i < count($rooms); $i++){
 		$firstRoomUUID = $rooms[$i]["UUID"];
 	}
 
-	//upload image to S3
-	// uploadImageToS3($rooms[$i]["image"], $rooms[$i]["imgUUID"]);
-
 	insertRoomToDB($rooms[$i]);
 
 }
@@ -89,21 +86,20 @@ addToListingDB($item);
 
 
 //debugging
-$myfile = fopen("submitRec.txt", "w") or die("Unable to open file!");
-foreach( $rooms as $room){
-  fwrite($myfile, $room["name"] . PHP_EOL);
-  fwrite($myfile, $room["id"] . PHP_EOL);
-  fwrite($myfile, $room["UUID"] . PHP_EOL);
-  fwrite($myfile, $room["firstRoom"] . PHP_EOL); 
-  fwrite($myfile, $firstRoomUUID . PHP_EOL);  
+// $myfile = fopen("submitRec.txt", "w") or die("Unable to open file!");
+// foreach( $rooms as $room){
+//   fwrite($myfile, $room["name"] . PHP_EOL);
+//   fwrite($myfile, $room["id"] . PHP_EOL);
+//   fwrite($myfile, $room["UUID"] . PHP_EOL);
+//   fwrite($myfile, $room["firstRoom"] . PHP_EOL); 
+//   fwrite($myfile, $firstRoomUUID . PHP_EOL);  
 
-  foreach( $room["links"] as $link){
-  	fwrite($myfile, $link["toUUID"] . PHP_EOL);
-  }
-  fwrite($myfile, PHP_EOL);
-}
-fclose($myfile);
-
+//   foreach( $room["links"] as $link){
+//   	fwrite($myfile, $link["toUUID"] . PHP_EOL);
+//   }
+//   fwrite($myfile, PHP_EOL);
+// }
+// fclose($myfile);
 
 
 function getCorrespondingRoomUUID($rooms, $id){
