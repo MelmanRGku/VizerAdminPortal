@@ -67,7 +67,7 @@ if(isset($_SESSION['searchListings'])) {
                     echo "<td>".$listing["Address"]["S"]."</td>";
                     echo "<td>".$listing["City"]["S"]."</td>";
                     echo "<td>".$listing["UserEmail"]["S"]."</td>";
-                    echo '<td><a type="button"type="button" href="./editListing.php" class="btn btn-block btn-warning">Edit</a></td>';
+                    echo '<td><a type="button"type="button" href="./editListing.php?id='.$listing["ListingID"]["S"].'" class="btn btn-block btn-warning">Edit</a></td>';
                     echo "</tr>";
                   }
                   unset($_SESSION['searchListings']);
@@ -80,7 +80,7 @@ if(isset($_SESSION['searchListings'])) {
                     echo "<td>".$listing["Address"]["S"]."</td>";
                     echo "<td>".$listing["City"]["S"]."</td>";
                     echo "<td>".$listing["UserEmail"]["S"]."</td>";
-                    echo '<td><a type="button"type="button" href="./editListing.php" class="btn btn-block btn-warning">Edit</a></td>';
+                    echo '<td><a type="button"type="button" href="./editListing.php?id='.$listing["ListingID"]["S"].'" class="btn btn-block btn-warning">Edit</a></td>';
                     echo "</tr>";
                   }
                 }
