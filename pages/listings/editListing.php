@@ -93,6 +93,7 @@ $listing = getListing($_GET["id"]);
                 </div>
 
                 <button  class="btn btn-success">Submit</button>
+                <a type="button"type="button" href="./deleteListing.php?id=<?php echo $_GET["id"]?>" class="btn btn-danger">Remove</a>
               </div>
             </form>
          
