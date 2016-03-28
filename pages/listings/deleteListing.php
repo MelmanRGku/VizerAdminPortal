@@ -30,6 +30,7 @@ foreach($allRooms["Items"] as $room)
 		deleteBubble($bubble["BubbleID"]["S"]);
 	}
 
+	deleteImage($room["ImageID"]["S"]);
 	deleteRoom($room["RoomID"]["S"]);
 }
 

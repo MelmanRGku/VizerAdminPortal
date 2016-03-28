@@ -567,7 +567,7 @@ function deleteListing($id)
         ],
     ));
 
-    print_r($response);
+    //print_r($response);
 }
 
 function deleteRoom($id)
@@ -583,7 +583,7 @@ function deleteRoom($id)
         ],
     ));
 
-    print_r($response);
+    //print_r($response);
 }
 
 function deleteLink($id1, $id2)
@@ -601,7 +601,7 @@ function deleteLink($id1, $id2)
         ],
     ));
 
-    print_r($response);
+    //print_r($response);
 }
 
 function deleteBubble($id)
@@ -617,7 +617,19 @@ function deleteBubble($id)
         ],
     ));
 
-    print_r($response);
+    //print_r($response);
+}
+
+function deleteImage($id)
+{
+    $sdkConn = getS3Connection();
+    $s3 = $sdkConn->createS3();
+
+    $result = $s3->deleteObject(array(
+    'Bucket'     => 'izerlabshousestorage',
+    'Key'        => $id
+    ));
+    // print_r($result);
 }
 
 function createUUID()
