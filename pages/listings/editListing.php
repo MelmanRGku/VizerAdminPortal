@@ -43,7 +43,7 @@ $listing = getListing($_GET["id"]);
             <form role="form" id="newListingForm" method="post" action="./submitEditListing.php">
               <div class="box-body">
 
-              <div id="imageHolder">
+<!--               <div id="imageHolder">
                 <img class="img-responsive pad" width="400"  id="imgPreview"></img>
               </div>
 
@@ -52,7 +52,7 @@ $listing = getListing($_GET["id"]);
                 <div class="form-group">
                   <label>Main Image</label>
                   <input type="file" name="imgUpload" id="imgUpload" accept="image/*">
-                </div>
+                </div> -->
 
                 <div class="form-group">
                   <label>Address</label>

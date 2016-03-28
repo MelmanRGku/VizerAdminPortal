@@ -88,7 +88,7 @@ include_once($projectRoot."/template/header.php");
           </div>
           <button type="button" class="btn btn-primary" onclick="addBubbleClick()">Add Bubble</button>
           <button type="button" class="btn btn-primary" onclick="removeItemClick()">Remove Item</button>
-          <button type="button" class="btn btn-success" onclick="doneClick()">Done</button>
+          <button type="button" id="doneButton" class="btn btn-success" onclick="doneClick()">Done</button>
         </div>
         <!-- /.box-body -->
       </div>   

@@ -237,6 +237,7 @@ function nameEditClick()
 
 function doneClick(){
 
+  $("#doneButton").attr("disabled", true);
   $("#myModal").modal();
 
   for(var i = 0; i < rooms.length; i++)
@@ -248,6 +249,8 @@ function doneClick(){
 
         var room = getRoom(retData.id );
         room.imageUUID = retData.UUID;
+
+        //upload the rest of the data once all rooms have been uploaded
         if(allImagesUploaded() == true)
         {
           uploadDatatoServer();
