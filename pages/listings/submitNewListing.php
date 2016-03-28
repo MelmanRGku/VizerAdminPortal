@@ -5,11 +5,10 @@ session_start();
 $projectRoot = "../../";
 include_once($projectRoot."/includes/functions.php");
 
-echo $_POST["email"];
+// echo $_POST["email"];
 
 $rooms = $_POST["rooms"];
 
-/*
 //getting userID
 $userID = generate_user($_POST["email"], $_POST["name"], $_POST["phone"]);
 
@@ -21,7 +20,6 @@ $firstRoomUUID = null;
 // generate UUID for each room and push to DB
 for($i = 0; $i < count($rooms); $i++){
 	$rooms[$i]["UUID"] = createUUID();
-	$rooms[$i]["imgUUID"] = createUUID();
 	$rooms[$i]["listingUUID"] = $listingID;
 
 	if($rooms[$i]["firstRoom"] == true){
@@ -29,7 +27,7 @@ for($i = 0; $i < count($rooms); $i++){
 	}
 
 	//upload image to S3
-	uploadImageToS3($rooms[$i]["image"], $rooms[$i]["imgUUID"]);
+	// uploadImageToS3($rooms[$i]["image"], $rooms[$i]["imgUUID"]);
 
 	insertRoomToDB($rooms[$i]);
 
@@ -107,7 +105,7 @@ foreach( $rooms as $room){
 fclose($myfile);
 
 
-*/
+
 function getCorrespondingRoomUUID($rooms, $id){
 
 	foreach($rooms as $room){
