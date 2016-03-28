@@ -27,7 +27,7 @@ function getDBConnection()
     ],
     'http'    => [
         'verify' => $projectRoot .'includes/awsSDK/ca-bundle.crt'
-        //'verify' => 'C:\wamp\www\ca-bundle.crt'
+        #'verify' => 'C:\wamp\www\ca-bundle.crt'
     ]
     ]);
 
@@ -50,7 +50,7 @@ function getS3Connection()
     ],
     'http'    => [
         'verify' => $projectRoot .'includes/awsSDK/ca-bundle.crt'
-        //'verify' => 'C:\wamp\www\ca-bundle.crt'
+        #'verify' => 'C:\wamp\www\ca-bundle.crt'
     ]
 ]);
 
@@ -367,6 +367,66 @@ function getUsersRequests($email)
     return $returnArr;
 }
 
+function getListingRooms($id)
+{
+    $sdkConn = getDBConnection();
+    $dynamodb = $sdkConn->createDynamoDb();
+
+    $iterator = $dynamodb->query(array( 
+        'TableName'     => 'Room',
+        'IndexName'     => 'ListingID-index',
+        'KeyConditionExpression' => 'ListingID = :v_id',
+        'ExpressionAttributeValues' =>  [
+        ':v_id' => [
+            'S' => $id]
+        ],
+    ));
+
+    $returnArr = iterator_to_array($iterator);
+
+    return $returnArr;
+}
+
+function getRoomLinks($id)
+{
+    $sdkConn = getDBConnection();
+    $dynamodb = $sdkConn->createDynamoDb();
+
+    $iterator = $dynamodb->query(array( 
+        'TableName'     => 'Link',
+        'IndexName'     => 'RoomID1-index',
+        'KeyConditionExpression' => 'RoomID1 = :v_id',
+        'ExpressionAttributeValues' =>  [
+        ':v_id' => [
+            'S' => $id]
+        ],
+    ));
+
+    $returnArr = iterator_to_array($iterator);
+
+    return $returnArr;
+}
+
+function getRoomBubbles($id)
+{
+    $sdkConn = getDBConnection();
+    $dynamodb = $sdkConn->createDynamoDb();
+
+    $iterator = $dynamodb->query(array( 
+        'TableName'     => 'FeatureBubble',
+        'IndexName'     => 'RoomID-index',
+        'KeyConditionExpression' => 'RoomID = :v_id',
+        'ExpressionAttributeValues' =>  [
+        ':v_id' => [
+            'S' => $id]
+        ],
+    ));
+
+    $returnArr = iterator_to_array($iterator);
+
+    return $returnArr;
+}
+
 function getAdminPassword($email)
 {
     $sdkConn = getDBConnection();
@@ -492,6 +552,72 @@ function searchListings($query)
     $returnArr = iterator_to_array($iterator);
     
     return $returnArr;
+}
+
+function deleteListing($id)
+{
+    $sdkConn = getDBConnection();
+    $dynamodb = $sdkConn->createDynamoDb();
+
+    $response = $dynamodb->deleteItem(array( 
+        'TableName'     => 'Listing',
+        'Key' =>  [
+        'ListingID' => [
+            'S' => $id]
+        ],
+    ));
+
+    print_r($response);
+}
+
+function deleteRoom($id)
+{
+    $sdkConn = getDBConnection();
+    $dynamodb = $sdkConn->createDynamoDb();
+
+    $response = $dynamodb->deleteItem(array( 
+        'TableName'     => 'Room',
+        'Key' =>  [
+        'RoomID' => [
+            'S' => $id]
+        ],
+    ));
+
+    print_r($response);
+}
+
+function deleteLink($id1, $id2)
+{
+    $sdkConn = getDBConnection();
+    $dynamodb = $sdkConn->createDynamoDb();
+
+    $response = $dynamodb->deleteItem(array( 
+        'TableName'     => 'Link',
+        'Key' =>  [
+        'RoomID1' => [
+            'S' => $id1],
+        'RoomID2' => [
+            'S' => $id2]
+        ],
+    ));
+
+    print_r($response);
+}
+
+function deleteBubble($id)
+{
+    $sdkConn = getDBConnection();
+    $dynamodb = $sdkConn->createDynamoDb();
+
+    $response = $dynamodb->deleteItem(array( 
+        'TableName'     => 'FeatureBubble',
+        'Key' =>  [
+        'BubbleID' => [
+            'S' => $id]
+        ],
+    ));
+
+    print_r($response);
 }
 
 function createUUID()
